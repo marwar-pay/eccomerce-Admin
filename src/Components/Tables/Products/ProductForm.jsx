@@ -3,7 +3,7 @@ import { Dialog, Checkbox, FormControlLabel, DialogActions, DialogContent, Dialo
 import { apiPost, apiPut, apiGet } from '../../../api/apiMethods'; // Ensure you have apiPost, apiPut, and apiGet set up
 import { EditNoteOutlined } from '@mui/icons-material';
 
-const ProductForm = ({ dataHandler, initialData ,categories,websites}) => {
+const ProductForm = ({ dataHandler, initialData ,websites}) => {
   const [open, setOpen] = useState(false);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
@@ -16,6 +16,7 @@ const ProductForm = ({ dataHandler, initialData ,categories,websites}) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     if (initialData) {
@@ -42,6 +43,19 @@ const ProductForm = ({ dataHandler, initialData ,categories,websites}) => {
     setReferenceWebsite('');
     setCategory('');
   };
+
+  useEffect(() => {
+    if (referenceWebsite) {
+        const matchedWebsite = websites.find((website) => website._id === referenceWebsite);
+        if (matchedWebsite) {
+            setCategories(matchedWebsite.categories || []);
+        } else {
+            setCategories([]); 
+        }
+    } else {
+        setCategories([]);
+    }
+}, [referenceWebsite, websites]);
 
   const handleSubmit = async () => {
     if (!productName || !description || !images || !price || !referenceWebsite || !category) {

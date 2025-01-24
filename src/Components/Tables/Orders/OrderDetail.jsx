@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const OrderDetail = ({ open, onClose, data }) => {
     return (
@@ -45,7 +46,7 @@ const OrderDetail = ({ open, onClose, data }) => {
                                 Order Amount
                             </Typography>
                             <Typography variant="body1" sx={{ marginTop: 0.5 }}>
-                                {data.totalAmount}
+                                {data.totalAmount} &#8377;
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -77,13 +78,30 @@ const OrderDetail = ({ open, onClose, data }) => {
                                 Ordered Products
                             </Typography>
                         </Grid>
-                        {/* {data.products.map((item,index) =>
-                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Typography variant="body1" fontWeight="bold" color="textSecondary">
-
-                                </Typography>
-                            </Grid>
-                        )} */}
+                        <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>#</TableCell>
+                                        <TableCell>Product Name</TableCell>
+                                        <TableCell>Price</TableCell>
+                                        <TableCell>Quantity</TableCell>
+                                        <TableCell>Total</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.products.map((item, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{item.product?.productName}</TableCell>
+                                            <TableCell>{item.product?.price}  &#8377;</TableCell>
+                                            <TableCell>{item.quantity}*</TableCell>
+                                            <TableCell>{item.total}  &#8377;</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
 
                     </Grid>
                 ) : (

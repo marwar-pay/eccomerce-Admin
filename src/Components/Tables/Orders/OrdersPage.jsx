@@ -20,11 +20,11 @@ import {
     FormControl,
     InputLabel
 } from '@mui/material';
-import { apiGet } from '../../../api/apiMethods';
-import UserDetail from '../Users/UserDetail';
-import UserRoleForm from '../Users/UserForm';
+import { apiDelete, apiGet } from '../../../api/apiMethods';
 import OrderForm from './OrderForm';
 import OrderDetail from './OrderDetail';
+import { DeleteForeverOutlined } from '@mui/icons-material';
+import DeleteDialog from './../Website/DeleteDialog';
 
 const OrdersPage = () => {
     const [data, setData] = useState([]);
@@ -50,7 +50,6 @@ const OrdersPage = () => {
                 page: currentPage,
                 limit: pageSize,
             });
-            console.log(response)
             const orders = response.data?.orders;
             setData(orders || []);
             setTotalPages(response.data?.totalPages || 1);
@@ -80,6 +79,18 @@ const OrdersPage = () => {
             fetchData();
         }
     }, [filterWebsite, currentPage, searchInput, pageSize]);
+
+    const deleteHandler = async (id) => {
+        let API_URL = `api/order/orders/${id}`;
+        try {
+            const response = await apiDelete(API_URL); // Call the DELETE method
+            if (response.status === 200) {
+                fetchData();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     const openDialog = (id) => {
         setSelectedItemId(id);
@@ -159,7 +170,7 @@ const OrdersPage = () => {
                             data.map((item, index) => (
                                 <TableRow key={item._id}>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                    {index + (currentPage - 1) * pageSize + 1}
+                                        {index + (currentPage - 1) * pageSize + 1}
                                     </TableCell>
                                     <TableCell onClick={() => {
                                         setSelectedWebsite(item);
@@ -184,7 +195,10 @@ const OrdersPage = () => {
                                         {new Date(item.createdAt).toLocaleString()}
                                     </TableCell>
                                     <TableCell sx={{ display: 'flex', border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                        {/* <OrderForm userId={item._id} currentRole={item.role} userDetails={item} onRoleChange={fetchData}/> */}
+                                        <OrderForm dataHandler={fetchData} order={item} />
+                                        <IconButton onClick={() => openDialog(item._id)}>
+                                            <DeleteForeverOutlined />
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -200,11 +214,12 @@ const OrdersPage = () => {
                 }}
                 data={selectedWebsite}
             />
-            {/* <DeleteDialog
+            <DeleteDialog
+                deleteHandler={deleteHandler}
                 itemId={selectedItemId}
                 open={dialogOpen}
                 onClose={closeDialog}
-            /> */}
+            />
             <Grid container justifyContent="center">
                 <Pagination
                     count={totalPages}

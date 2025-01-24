@@ -1,92 +1,59 @@
-import { useEffect, useState } from 'react';
-import { Dialog, Checkbox, FormControlLabel, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid, Snackbar, SnackbarContent, MenuItem, Select, InputLabel, FormControl, IconButton } from '@mui/material';
-import { apiPost, apiPut, apiGet } from '../../../api/apiMethods'; // Ensure you have apiPost, apiPut, and apiGet set up
+import React, { useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  Snackbar,
+  SnackbarContent,
+  Paper,
+  IconButton,
+} from '@mui/material';
 import { EditNoteOutlined } from '@mui/icons-material';
+import { apiPut } from '../../../api/apiMethods';
 
-const OrderForm = ({ dataHandler, initialData ,categories,websites}) => {
+const OrderForm = ({ order,dataHandler }) => {
   const [open, setOpen] = useState(false);
-  const [productName, setProductName] = useState('');
-  const [description, setDescription] = useState('');
-  const [images, setImages] = useState('');
-  const [price, setPrice] = useState(0);
-  const [size, setSize] = useState('M');
-  const [discount, setDiscount] = useState(0);
-  const [referenceWebsite, setReferenceWebsite] = useState('');
-  const [category, setCategory] = useState('');
+  const [status, setStatus] = useState(order.status);
+  const [paymentStatus, setPaymentStatus] = useState(order.paymentStatus);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-  useEffect(() => {
-    if (initialData) {
-      setProductName(initialData.productName || '');
-      setDescription(initialData.description || '');
-      setImages(initialData.images?.join(', ') || '');
-      setPrice(initialData.price || 0);
-      setSize(initialData.size || 'M');
-      setDiscount(initialData.discount || 0);
-      setReferenceWebsite(initialData.referenceWebsite || '');
-      setCategory(initialData.category?._id || '');
-    } else {
-      resetForm();
-    }
-  }, [initialData]);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  const resetForm = () => {
-    setProductName('');
-    setDescription('');
-    setImages('');
-    setPrice(0);
-    setSize('M');
-    setDiscount(0);
-    setReferenceWebsite('');
-    setCategory('');
-  };
-
-  const handleSubmit = async () => {
-    if (!productName || !description || !images || !price || !referenceWebsite || !category) {
-      setSnackbarMessage('Please fill all required fields');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
-      return;
-    }
-
-    const newProduct = {
-      productName,
-      description,
-      images: images.split(',').map((img) => img.trim()),
-      price,
-      actualPrice:(price*(100-discount)/100).toFixed(2),
-      size,
-      discount,
-      referenceWebsite,
-      category,
-    };
-
+  const handleStatusChange = async () => {
     try {
-      const response = initialData
-        ? await apiPut(`api/product/products/${initialData._id}`, newProduct)
-        : await apiPost('api/product/createproduct', newProduct);
-        console.log(response)
-      if (response.status === 200) {
-        setSnackbarMessage('Product saved successfully');
+      const updatedOrder = {
+        ...order,
+        status,
+        paymentStatus,
+      };
+      const response = await apiPut(`/api/order/orders/${order._id}/status`, updatedOrder);
+      if (response) {
+        setSnackbarMessage('Order updated successfully');
         setSnackbarSeverity('success');
-        setOpen(false);
+        setSnackbarOpen(true);
         dataHandler();
+        handleClose();
       }
     } catch (error) {
-      setSnackbarMessage('Failed to save product');
+      setSnackbarMessage('Failed to update order');
       setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
-    setSnackbarOpen(true);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const handleSnackbarClose = () => {
@@ -95,124 +62,76 @@ const OrderForm = ({ dataHandler, initialData ,categories,websites}) => {
 
   return (
     <div>
-      {initialData ? (
-        <IconButton onClick={handleClickOpen}>
-          <EditNoteOutlined />
+      {/* Button to open dialog */}
+        <IconButton onClick={handleOpen}>
+          <EditNoteOutlined/>
         </IconButton>
-      ) : (
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          New Product
-        </Button>
-      )}
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{initialData ? 'Update Product' : 'New Product'}</DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle>Order Details</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Product Name"
-                variant="outlined"
-                required
-                value={productName}
-                sx={{marginTop:1}}
-                onChange={(e) => setProductName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Description"
-                variant="outlined"
-                required
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Images (comma-separated)"
-                variant="outlined"
-                required
-                value={images}
-                onChange={(e) => setImages(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Price"
-                variant="outlined"
-                type="number"
-                required
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <FormControl fullWidth>
-                <InputLabel>Size</InputLabel>
-                <Select value={size} onChange={(e) => setSize(e.target.value)}>
-                  {['S', 'M', 'L', 'XL', 'XXL'].map((sizeOption) => (
-                    <MenuItem key={sizeOption} value={sizeOption}>
-                      {sizeOption}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Discount (%)"
-                variant="outlined"
-                type="number"
-                value={discount}
-                onChange={(e) => setDiscount(Number(e.target.value))}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Reference Website</InputLabel>
-                <Select
-                  value={referenceWebsite}
-                  defaultValue=''
-                  onChange={(e) => setReferenceWebsite(e.target.value)}
-                >
-                  {websites.map((site) => (
-                    <MenuItem key={site._id} value={site._id}>
-                      {site.websiteName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={category}
-                  defaultValue=''
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  {categories.map((cat) => (
-                    <MenuItem key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell>Product Name</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Quantity</TableCell>
+                  <TableCell>Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {order.products.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item?.product?.productName}</TableCell>
+                    <TableCell>{item?.product?.price}</TableCell>
+                    <TableCell>{item?.quantity}</TableCell>
+                    <TableCell>{item?.total}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <div style={{ marginTop: 20 }}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Status</InputLabel>
+              <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+                {["pending", "processing", "shipped", "delivered", "cancelled"].map((statusOption) => (
+                  <MenuItem key={statusOption} value={statusOption}>
+                    {statusOption}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Payment Status</InputLabel>
+              <Select
+                value={paymentStatus}
+                onChange={(e) => setPaymentStatus(e.target.value)}
+              >
+                {["pending", "completed", "failed"].map((paymentOption) => (
+                  <MenuItem key={paymentOption} value={paymentOption}>
+                    {paymentOption}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary" variant="contained">
-            Submit
+          <Button
+            onClick={handleStatusChange}
+            color="primary"
+            variant="contained"
+          >
+            Update Order
           </Button>
         </DialogActions>
       </Dialog>
