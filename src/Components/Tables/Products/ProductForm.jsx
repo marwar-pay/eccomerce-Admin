@@ -20,14 +20,14 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
 
   useEffect(() => {
     if (initialData) {
-      setProductName(initialData.productName || '');
+      setProductName(initialData?.productName || '');
       setDescription(initialData.description || '');
       setImages(initialData.images?.join(', ') || '');
-      setPrice(initialData.price || 0);
-      setSize(initialData.size || 'M');
-      setDiscount(initialData.discount || 0);
-      setReferenceWebsite(initialData.referenceWebsite || '');
-      setCategory(initialData.category?._id || '');
+      setPrice(initialData?.price || 0);
+      setSize(initialData?.size || 'M');
+      setDiscount(initialData?.discount || 0);
+      setReferenceWebsite(initialData?.referenceWebsite || '');
+      setCategory(initialData?.category?._id || '');
     } else {
       resetForm();
     }

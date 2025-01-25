@@ -149,25 +149,25 @@ function Sidebar() {
         { key: '1028', label: <Link to="/orders">Received Orders</Link> }
       ],
     },
-    {
-      key: 'sub829',
-      icon: <QueryStatsOutlined />,
-      label: 'Queries',
-      children: [
-        { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
-      ],
-    },
+    // {
+    //   key: 'sub829',
+    //   icon: <QueryStatsOutlined />,
+    //   label: 'Queries',
+    //   children: [
+    //     { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
+    //   ],
+    // },
 
-    {
-      key: 'sub9',
-      icon: <SettingOutlined />,
-      label: 'Setting',
-      children: [
-        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-        { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
+    // {
+    //   key: 'sub9',
+    //   icon: <SettingOutlined />,
+    //   label: 'Setting',
+    //   children: [
+    //     { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+    //     { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
 
-      ],
-    },
+    //   ],
+    // },
   ];
 
   return (
