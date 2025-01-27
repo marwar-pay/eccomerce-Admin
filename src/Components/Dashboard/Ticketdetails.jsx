@@ -16,22 +16,22 @@ const Ticketdetails = () => {
   const [error, setError] = useState(null);
 
 
-  const API_ENDPOINT = `apiUser/v1/support/getSupportTicket`;
+  // const API_ENDPOINT = `apiUser/v1/support/getSupportTicket`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiGet(API_ENDPOINT);
-        setTicketData(response.data.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiGet(API_ENDPOINT);
+  //       setTicketData(response.data.data);
+  //     } catch (err) {
+  //       setError(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const pieData = ticketData?.length ? [
     { name: 'Pending', value: ticketData.filter(ticket => ticket.isStatus === 'Pending').length || 0 },

@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import { UserProvider } from './Context/UserContext';
 
 const originalWarn = console.warn;
 console.warn = (...args) => {
@@ -13,6 +14,8 @@ console.warn = (...args) => {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
+    <UserProvider>
+      <App />
+    </UserProvider>
+  </StrictMode>
 )

@@ -40,24 +40,24 @@ const ViewTicket = () => {
   const itemsPerPage = 10;
   const isSmallScreen = useMediaQuery('(max-width:800px)');
 
-  const API_ENDPOINT = `apiUser/v1/support/getSupportTicket`;
+  // const API_ENDPOINT = `apiUser/v1/support/getSupportTicket`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiGet(API_ENDPOINT);
-        setTicketData(response.data.data);
-        setFilteredData(response.data.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('There was an error fetching the ticket data!', error);
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiGet(API_ENDPOINT);
+  //       setTicketData(response.data.data);
+  //       setFilteredData(response.data.data);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error('There was an error fetching the ticket data!', error);
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    // Fetch data initially
-    fetchData();
-  }, []);
+  //   // Fetch data initially
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     handleFilter(); // Call handleFilter when search inputs change

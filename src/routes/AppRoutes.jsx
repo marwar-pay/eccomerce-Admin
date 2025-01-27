@@ -26,7 +26,7 @@ const AppRoutes = () => {
       <Route path="/orders" element={<OrdersPage />} />
 
       <Route path="/view-tickets" element={<ViewTicket />} />
-      <Route path="/create-ticket" element={<CreateTicket />} />
+      {/* <Route path="/create-ticket" element={<CreateTicket />} /> */}
       <Route path="/settings/profile" element={<Profile />} />
       <Route path="/settings/changepassword" element={<ChangePassword />} />
       <Route path="/settings/edit" element={<EditProfile />} />

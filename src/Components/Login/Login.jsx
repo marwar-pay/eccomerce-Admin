@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import assetimg from "../../assets/images/Login.gif";
 import logo from "../../assets/images/logo.png";
 import { apiPost } from "../../api/apiMethods";
+import { useUser } from "../../Context/UserContext";
 
 const API_ENDPOINT = `api/auth/admin_login`;
 
@@ -27,6 +28,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+    const { initializeUser } = useUser();
 
   const handleLogin = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -34,7 +36,7 @@ const Login = () => {
     try {
       const response = await apiPost(API_ENDPOINT, { email, password });
       const { accessToken, refreshToken, userData } = response.data;
-      if (userData.role === "admin") {
+      if (userData.role === "admin" || userData.role === 'vendor') {
         if (accessToken && refreshToken) {
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
@@ -44,12 +46,13 @@ const Login = () => {
           setOpenSnackbar(true);
           setTimeout(() => {
             navigate("/");
+            initializeUser()
           }, 2000);
         } else {
           throw new Error("Access token or refresh token is missing.");
         }
       } else {
-        setSnackbarMessage("Login failed. Only Retailer accounts can log in.");
+        setSnackbarMessage("Login failed. Only admin can log in.");
         setOpenSnackbar(true);
       }
     } catch (err) {

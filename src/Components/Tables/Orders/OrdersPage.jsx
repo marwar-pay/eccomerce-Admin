@@ -12,7 +12,6 @@ import {
     Grid,
     Button,
     Pagination,
-    useMediaQuery,
     IconButton,
     Snackbar,
     MenuItem,
@@ -40,6 +39,8 @@ const OrdersPage = () => {
     const [pageSize, setPageSize] = useState(10);
     const [websites, setWebsites] = useState([]);
     const [filterWebsite, setfilterWebsite] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
     const API_ENDPOINT = `api/order/allorders`;
 
     const fetchData = async () => {
@@ -49,6 +50,10 @@ const OrdersPage = () => {
                 customerName: searchInput,
                 page: currentPage,
                 limit: pageSize,
+                sortBy,
+                sortOrder,
+                minPrice,
+                maxPrice,
             });
             const orders = response.data?.orders;
             setData(orders || []);
@@ -61,24 +66,21 @@ const OrdersPage = () => {
 
     const fetchDropdownData = async () => {
         try {
-            const [websitesResponse, categoriesResponse] = await Promise.all([
-                apiGet('api/website'),
-            ]);
+            const websitesResponse = await apiGet('api/website');
             setWebsites(websitesResponse.data?.websites || []);
-            setfilterWebsite(websitesResponse.data?.websites[0]._id);
+            setfilterWebsite(websitesResponse.data?.websites[0]._id); // Set the default website to the first one
         } catch (error) {
             console.error('Failed to fetch dropdown data:', error.message);
         }
     };
-    useEffect(() => {
-        fetchDropdownData();
-    }, [])
 
     useEffect(() => {
-        if (filterWebsite) {
+        fetchDropdownData();
+    }, []);
+
+    useEffect(() => {
             fetchData();
-        }
-    }, [filterWebsite, currentPage, searchInput, pageSize]);
+    }, [filterWebsite, currentPage, searchInput, pageSize, sortBy, sortOrder, minPrice, maxPrice]);
 
     const deleteHandler = async (id) => {
         let API_URL = `api/order/orders/${id}`;
@@ -115,7 +117,7 @@ const OrdersPage = () => {
         <>
             <Grid container alignItems="center" sx={{ mb: 2 }}>
                 <Grid item xs>
-                    <Typography variant="h5" gutterBottom>Recived orders</Typography>
+                    <Typography variant="h5" gutterBottom>Received Orders</Typography>
                 </Grid>
             </Grid>
             <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
@@ -136,29 +138,72 @@ const OrdersPage = () => {
                         <InputLabel>Reference Website</InputLabel>
                         <Select
                             value={filterWebsite}
-                            defaultValue=''
                             onChange={(e) => setfilterWebsite(e.target.value)}
                             label="Website"
                         >
+                                <MenuItem value=''>All</MenuItem>
                             {websites && websites.map((item, index) =>
                                 <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
                 </Grid>
+                <Grid item xs={3}>
+                    <TextField
+                        label="Min Price"
+                        variant="outlined"
+                        fullWidth
+                        value={minPrice}
+                        onChange={(e) => {
+                            setMinPrice(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <TextField
+                        label="Max Price"
+                        variant="outlined"
+                        fullWidth
+                        value={maxPrice}
+                        onChange={(e) => {
+                            setMaxPrice(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    />
+                </Grid>
             </Grid>
             <TableContainer component={Paper} sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}>
                 <Table sx={{ borderCollapse: 'collapse' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>#</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Customer</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Shipping Address</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Payment status</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Order status</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Price</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Order Date</strong></TableCell>
-                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Action</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>#</strong>
+                            </TableCell>
+                            <TableCell
+                                sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}
+                                onClick={() => handleSortChange('customer')}
+                            >
+                                <strong>Customer</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Shipping Address</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Payment Status</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Order Status</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Price</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Order Date</strong>
+                            </TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                <strong>Action</strong>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -172,11 +217,8 @@ const OrdersPage = () => {
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {index + (currentPage - 1) * pageSize + 1}
                                     </TableCell>
-                                    <TableCell onClick={() => {
-                                        setSelectedWebsite(item);
-                                        setDetailOpen(true)
-                                    }
-                                    } sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
+                                    <TableCell onClick={() => { setSelectedWebsite(item); setDetailOpen(true); }}
+                                        sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
                                         {item.customer?.firstName + ' ' + item.customer?.lastName || 'NA'}
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
@@ -205,13 +247,10 @@ const OrdersPage = () => {
                         )}
                     </TableBody>
                 </Table>
-            </TableContainer >
+            </TableContainer>
             <OrderDetail
                 open={detailOpen}
-                onClose={() => {
-                    setDetailOpen(false);
-                    setSelectedWebsite(null);
-                }}
+                onClose={() => { setDetailOpen(false); setSelectedWebsite(null); }}
                 data={selectedWebsite}
             />
             <DeleteDialog

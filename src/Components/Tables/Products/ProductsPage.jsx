@@ -190,6 +190,7 @@ const ProductsPage = () => {
                         >
                             <MenuItem value="productName">Name</MenuItem>
                             <MenuItem value="price">Price</MenuItem>
+                            <MenuItem value="discount">Discount</MenuItem>
                             <MenuItem value="createdAt">Created</MenuItem>
                         </Select>
                     </FormControl>

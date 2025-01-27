@@ -4,18 +4,14 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
   ProfileOutlined,
-  WalletOutlined,
-  FileProtectOutlined,
   SettingOutlined,
   SunOutlined,
   MoonOutlined,
   ProductOutlined,
   OrderedListOutlined,
 } from '@ant-design/icons';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { Avatar, Button, Layout, Menu, Dropdown, message, theme } from 'antd';
 import { useNavigate } from 'react-router';
-import { accessConstent } from '../../helpingFile';
 
 import { Link } from 'react-router-dom';
 import AppRoutes from '../../routes/AppRoutes';
@@ -23,6 +19,7 @@ import '../style.css'; // Import the CSS file
 import { CategoryOutlined, DashboardOutlined, QueryStatsOutlined, WebAssetOutlined } from '@mui/icons-material';
 import logo from "../.././assets/images/logo.png";
 import { apiGet } from '../../api/apiMethods';
+import { useUser } from '../../Context/UserContext';
 
 const { Header, Sider, Content } = Layout;
 
@@ -33,9 +30,11 @@ function Sidebar() {
   const {
     token: { borderRadiusLG },
   } = theme.useToken();
+  const { user,setUser } = useUser();
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
+
 
   const handleLogout = async () => {
     try {
@@ -44,6 +43,7 @@ function Sidebar() {
         localStorage.removeItem('accessToken');
         message.success(response.data.message || "You have been logged out.");
         navigate('/login');
+        setUser(null)
       } else {
         message.error("Logout failed. Please try again.");
       }
@@ -58,19 +58,13 @@ function Sidebar() {
   };
 
   useEffect(() => {
+    setUserData(user)
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.remove('dark-mode');
     }
-    apiGet(`api/auth/userInfo`)
-      .then(response => {
-        setUserData(response.data.user);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the user data!', error);
-      });
-  }, [isDarkMode, navigate]);
+  }, [isDarkMode, navigate,user]);
 
   const userInitial = getUserInitials(userData?.firstName || '');
 
@@ -149,25 +143,24 @@ function Sidebar() {
         { key: '1028', label: <Link to="/orders">Received Orders</Link> }
       ],
     },
-    // {
-    //   key: 'sub829',
-    //   icon: <QueryStatsOutlined />,
-    //   label: 'Queries',
-    //   children: [
-    //     { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
-    //   ],
-    // },
+    {
+      key: 'sub829',
+      icon: <QueryStatsOutlined />,
+      label: 'Queries',
+      children: [
+        { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
+      ],
+    },
 
-    // {
-    //   key: 'sub9',
-    //   icon: <SettingOutlined />,
-    //   label: 'Setting',
-    //   children: [
-    //     { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-    //     { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
-
-    //   ],
-    // },
+    {
+      key: 'sub9',
+      icon: <SettingOutlined />,
+      label: 'Setting',
+      children: [
+        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+        // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
+      ],
+    },
   ];
 
   return (
@@ -218,6 +211,17 @@ function Sidebar() {
               style={{ fontSize: '16px', width: 64, height: 64, color: 'var(--text-color)' }}
             />
             <div style={{ display: 'flex', alignItems: 'center' }}>
+              <p
+                style={{
+                  textTransform: "uppercase",
+                  marginRight: "16px", // Adjust margin as needed
+                  fontWeight: "500",
+                  color: "#555", // Optional: Change text color
+                  fontSize: "14px", // Optional: Adjust font size
+                }}
+              >
+                {userData?.role}
+              </p>
               <Dropdown menu={{ items: menuItems1 }} trigger={['click']}>
                 {userData && userData?.profileImage ? (
                   <img src={userData?.profileImage} alt="Profile" style={{ width: 40, height: 40, borderRadius: '50%' }} />
