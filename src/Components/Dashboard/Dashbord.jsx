@@ -28,8 +28,6 @@ function Dashbord() {
     fetchData()
   }, [])
 
-  console.log(data)
-
   return (
     <div>
       <div style={{ height: '200px' }} className='topsidebar'>

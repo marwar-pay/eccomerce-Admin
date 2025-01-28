@@ -23,7 +23,7 @@ import {
 import { apiDelete, apiGet } from '../../../api/apiMethods';
 import ProductForm from './ProductForm';
 import ProductDetail from './ProductDetail';
-import { DeleteForeverOutlined } from '@mui/icons-material';
+import { DeleteForeverOutlined, Height } from '@mui/icons-material';
 import DeleteDialog from '../Website/DeleteDialog';
 
 const ProductsPage = () => {
@@ -64,6 +64,8 @@ const ProductsPage = () => {
         }
     };
 
+    console.log(data)
+
     const fetchDropdownData = async () => {
         try {
             const [websitesResponse] = await Promise.all([
@@ -85,7 +87,7 @@ const ProductsPage = () => {
             if (matchedWebsite) {
                 setCategories(matchedWebsite.categories || []);
             } else {
-                setCategories([]); 
+                setCategories([]);
             }
         } else {
             setCategories([]);
@@ -173,7 +175,7 @@ const ProductsPage = () => {
                             onChange={(e) => setFilterCategory(e.target.value)}
                             label="Product Category"
                         >
-                                <MenuItem value=''>None</MenuItem>
+                            <MenuItem value=''>None</MenuItem>
                             {categories && categories.map((item, index) =>
                                 <MenuItem key={index} value={item._id}>{item.name}</MenuItem>
                             )}
@@ -214,6 +216,7 @@ const ProductsPage = () => {
                         <TableRow>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>#</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Name</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Images</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Amount</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Discount</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Category</strong></TableCell>
@@ -230,7 +233,7 @@ const ProductsPage = () => {
                             data.map((item, index) => (
                                 <TableRow key={item._id}>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                    {index + (currentPage - 1) * pageSize + 1}
+                                        {index + (currentPage - 1) * pageSize + 1}
                                     </TableCell>
                                     <TableCell onClick={() => {
                                         setSelectedWebsite(item);
@@ -238,6 +241,14 @@ const ProductsPage = () => {
                                     }
                                     } sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
                                         {item.productName || 'NA'}
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        <div style={{display:'flex',gap:'4px'}}>
+                                            {item.images.map((item) =>
+                                                <img style={{ height: '35px',width:'35px',objectFit:'cover',boxShadow:"1px 1px 10px",borderRadius:'50%' }} src={item} alt="" />
+                                            ) || 'NA'}
+                                        </div>
+
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {item.price || 'NA'} &#8377;
