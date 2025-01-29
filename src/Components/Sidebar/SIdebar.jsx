@@ -95,7 +95,9 @@ function Sidebar() {
     <Menu items={menuItems1} />
   );
 
-  const menuItems = [
+
+
+  const menuItems = user?.role === 'admin' ? [
     {
       key: '1',
       icon: <DashboardOutlined />,
@@ -152,6 +154,37 @@ function Sidebar() {
       ],
     },
 
+    {
+      key: 'sub9',
+      icon: <SettingOutlined />,
+      label: 'Setting',
+      children: [
+        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+        // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
+      ],
+    },
+  ] :  [
+    {
+      key: '1',
+      icon: <DashboardOutlined />,
+      label: <Link to="/">Dashboard</Link>,
+    },
+    {
+      key: 'sub7',
+      icon: <ProductOutlined />,
+      label: 'Products',
+      children: [
+        { key: '10', label: <Link to="/products">Products</Link> },
+      ],
+    },
+    {
+      key: 'sub89',
+      icon: <OrderedListOutlined />,
+      label: 'Orders',
+      children: [
+        { key: '1028', label: <Link to="/orders">Received Orders</Link> }
+      ],
+    },
     {
       key: 'sub9',
       icon: <SettingOutlined />,
