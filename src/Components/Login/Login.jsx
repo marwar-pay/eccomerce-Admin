@@ -36,7 +36,7 @@ const Login = () => {
     try {
       const response = await apiPost(API_ENDPOINT, { email, password });
       const { accessToken, refreshToken, userData } = response.data;
-      if (userData.role === "admin" || userData.role === 'vendor') {
+      if (userData.role === "admin" || userData.role === 'vendor' || userData.role === 'super-admin') {
         if (accessToken && refreshToken) {
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);

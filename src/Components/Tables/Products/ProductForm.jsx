@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { Dialog, Checkbox, FormControlLabel, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid, Snackbar, SnackbarContent, MenuItem, Select, InputLabel, FormControl, IconButton } from '@mui/material';
 import { apiPost, apiPut, apiGet } from '../../../api/apiMethods'; // Ensure you have apiPost, apiPut, and apiGet set up
 import { EditNoteOutlined } from '@mui/icons-material';
+import { useUser } from '../../../Context/UserContext';
 
-const ProductForm = ({ dataHandler, initialData ,websites}) => {
+const ProductForm = ({ dataHandler, initialData, websites }) => {
   const [open, setOpen] = useState(false);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
@@ -16,7 +17,8 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  const { user, categories, setCategories } = useUser();
 
   useEffect(() => {
     if (initialData) {
@@ -33,6 +35,12 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
     }
   }, [initialData]);
 
+  useEffect(() => {
+    if (user) {
+      setReferenceWebsite(user.referenceWebsite)
+    }
+  }, [user])
+
   const resetForm = () => {
     setProductName('');
     setDescription('');
@@ -46,16 +54,16 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
 
   useEffect(() => {
     if (referenceWebsite) {
-        const matchedWebsite = websites.find((website) => website._id === referenceWebsite);
-        if (matchedWebsite) {
-            setCategories(matchedWebsite.categories || []);
-        } else {
-            setCategories([]); 
-        }
+      const matchedWebsite = websites.find((website) => website._id === referenceWebsite);
+      if (matchedWebsite) {
+        // setCategories(matchedWebsite.categories || []);
+      } else {
+        // setCategories([]);
+      }
     } else {
-        setCategories([]);
+      // setCategories([]);
     }
-}, [referenceWebsite, websites]);
+  }, [referenceWebsite, websites]);
 
   const handleSubmit = async () => {
     if (!productName || !description || !images || !price || !referenceWebsite || !category) {
@@ -70,7 +78,7 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
       description,
       images: images.split(',').map((img) => img.trim()),
       price,
-      actualPrice:(price*(100-discount)/100).toFixed(2),
+      actualPrice: (price * (100 - discount) / 100).toFixed(2),
       size,
       discount,
       referenceWebsite,
@@ -81,7 +89,7 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
       const response = initialData
         ? await apiPut(`api/product/products/${initialData._id}`, newProduct)
         : await apiPost('api/product/createproduct', newProduct);
-        console.log(response)
+      console.log(response)
       if (response.status === 200) {
         setSnackbarMessage('Product saved successfully');
         setSnackbarSeverity('success');
@@ -113,11 +121,11 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
         <IconButton onClick={handleClickOpen}>
           <EditNoteOutlined />
         </IconButton>
-      ) : (
+      ) : user && (user.role === 'admin' || user.role === 'vendor') ? (
         <Button variant="contained" color="primary" onClick={handleClickOpen}>
           New Product
         </Button>
-      )}
+      ) : null}
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{initialData ? 'Update Product' : 'New Product'}</DialogTitle>
@@ -130,7 +138,7 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
                 variant="outlined"
                 required
                 value={productName}
-                sx={{marginTop:1}}
+                sx={{ marginTop: 1 }}
                 onChange={(e) => setProductName(e.target.value)}
               />
             </Grid>
@@ -187,7 +195,7 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
                 onChange={(e) => setDiscount(Number(e.target.value))}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel>Reference Website</InputLabel>
                 <Select
@@ -202,7 +210,7 @@ const ProductForm = ({ dataHandler, initialData ,websites}) => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>

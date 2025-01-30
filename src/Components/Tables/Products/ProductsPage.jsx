@@ -25,6 +25,7 @@ import ProductForm from './ProductForm';
 import ProductDetail from './ProductDetail';
 import { DeleteForeverOutlined, Height } from '@mui/icons-material';
 import DeleteDialog from '../Website/DeleteDialog';
+import { useUser } from '../../../Context/UserContext';
 
 const ProductsPage = () => {
     const [data, setData] = useState([]);
@@ -41,8 +42,11 @@ const ProductsPage = () => {
     const [websites, setWebsites] = useState([]);
     const [filterWebsite, setfilterWebsite] = useState('');
     const [filterCategory, setFilterCategory] = useState('')
-    const [categories, setCategories] = useState([]);
+    // const [categories, setCategories] = useState([]);
     const API_ENDPOINT = `api/product/getproducts`;
+
+    const { user, setCategories, categories } = useUser()
+    console.log("file: ProductsPage.jsx:49 ~ ProductsPage ~ user:", user);
 
     const fetchData = async () => {
         try {
@@ -78,8 +82,13 @@ const ProductsPage = () => {
         }
     };
     useEffect(() => {
-        fetchDropdownData();
-    }, [])
+        if (!user) return;
+        if (user.role === 'super-admin') {
+            fetchDropdownData();
+        } else {
+            setfilterWebsite(user.referenceWebsite)
+        }
+    }, [user])
 
     useEffect(() => {
         if (filterWebsite) {
@@ -151,7 +160,7 @@ const ProductsPage = () => {
                         }}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                {user && user.role === "super-admin" && <Grid item xs={3}>
                     <FormControl fullWidth>
                         <InputLabel>Reference Website</InputLabel>
                         <Select
@@ -165,7 +174,7 @@ const ProductsPage = () => {
                             )}
                         </Select>
                     </FormControl>
-                </Grid>
+                </Grid>}
                 <Grid item xs={3}>
                     <FormControl fullWidth>
                         <InputLabel>Category</InputLabel>
@@ -175,7 +184,7 @@ const ProductsPage = () => {
                             onChange={(e) => setFilterCategory(e.target.value)}
                             label="Product Category"
                         >
-                            <MenuItem value=''>None</MenuItem>
+                            <MenuItem value=''>All</MenuItem>
                             {categories && categories.map((item, index) =>
                                 <MenuItem key={index} value={item._id}>{item.name}</MenuItem>
                             )}
@@ -243,9 +252,9 @@ const ProductsPage = () => {
                                         {item.productName || 'NA'}
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                        <div style={{display:'flex',gap:'4px'}}>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
                                             {item.images.map((item) =>
-                                                <img style={{ height: '35px',width:'35px',objectFit:'cover',boxShadow:"1px 1px 10px",borderRadius:'50%' }} src={item} alt="" />
+                                                <img style={{ height: '35px', width: '35px', objectFit: 'cover', boxShadow: "1px 1px 10px", borderRadius: '50%' }} src={item} alt="" />
                                             ) || 'NA'}
                                         </div>
 

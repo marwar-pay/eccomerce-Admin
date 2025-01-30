@@ -5,13 +5,15 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState();
+    const [categories, setCategories] = useState([])
+    const [logoURL, setLogoURL] = useState("")
     const token = localStorage.getItem('accessToken')
 
     const initializeUser = async () => {
         try {
-            const response = await apiGet("api/auth/userInfo"); 
-            if(response.status === 200){
-                setUser(response.data?.user); 
+            const response = await apiGet("api/auth/userInfo");
+            if (response.status === 200) {
+                setUser(response.data?.user);
             }
         } catch (error) {
             console.error("Failed to fetch user data:", error.message);
@@ -19,13 +21,26 @@ export const UserProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if(token){
+        if (token) {
             initializeUser();
         }
     }, [token]);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                if (!user) return;
+                const { data } = await apiGet(`/api/website/${user.referenceWebsite}`)
+                setCategories(data.website.categories);
+                setLogoURL(data.logoUrl);
+            } catch (error) {
+                console.log("file: UserContext.jsx:32 ~ error:", error);
+            }
+        })()
+    }, [user])
+
     return (
-        <UserContext.Provider value={{ user, setUser, initializeUser }}>
+        <UserContext.Provider value={{ user, setUser, initializeUser, categories, setCategories, logoURL }}>
             {children}
         </UserContext.Provider>
     );

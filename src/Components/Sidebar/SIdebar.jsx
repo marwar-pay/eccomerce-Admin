@@ -30,7 +30,8 @@ function Sidebar() {
   const {
     token: { borderRadiusLG },
   } = theme.useToken();
-  const { user,setUser } = useUser();
+  const { user, setUser, logoURL } = useUser();
+  console.log("file: SIdebar.jsx:34 ~ Sidebar ~ logoURL:", logoURL);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
@@ -64,7 +65,7 @@ function Sidebar() {
     } else {
       document.body.classList.remove('dark-mode');
     }
-  }, [isDarkMode, navigate,user]);
+  }, [isDarkMode, navigate, user]);
 
   const userInitial = getUserInitials(userData?.firstName || '');
 
@@ -97,18 +98,169 @@ function Sidebar() {
 
 
 
-  const menuItems = user?.role === 'admin' ? [
+  // const menuItems = user?.role === 'super-admin' ? [
+  //   {
+  //     key: '1',
+  //     icon: <DashboardOutlined />,
+  //     label: <Link to="/">Dashboard</Link>,
+  //   },
+  //   {
+  //     key: 'sub2',
+  //     icon: <WebAssetOutlined />,
+  //     label: 'Websites',
+  //     children: [
+  //       { key: '687', label: <Link to="/websites">All Website</Link> }
+  //     ],
+  //   },
+  //   {
+  //     key: '8',
+  //     icon: <CategoryOutlined />,
+  //     label: 'Categories',
+  //     children: [
+  //       { key: '6', label: <Link to="/categories">All Categories</Link> },
+  //     ],
+  //   },
+
+  //   {
+  //     key: 'sub5',
+  //     icon: <UserOutlined />,
+  //     label: 'Users',
+  //     children: [
+  //       { key: '7', label: <Link to="/users">User list</Link> },
+  //     ],
+  //   },
+
+  //   {
+  //     key: 'sub7',
+  //     icon: <ProductOutlined />,
+  //     label: 'Products',
+  //     children: [
+  //       { key: '10', label: <Link to="/products">Products</Link> },
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub89',
+  //     icon: <OrderedListOutlined />,
+  //     label: 'Orders',
+  //     children: [
+  //       { key: '1028', label: <Link to="/orders">Received Orders</Link> }
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub829',
+  //     icon: <QueryStatsOutlined />,
+  //     label: 'Queries',
+  //     children: [
+  //       { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
+  //     ],
+  //   },
+
+  //   {
+  //     key: 'sub9',
+  //     icon: <SettingOutlined />,
+  //     label: 'Setting',
+  //     children: [
+  //       { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+  //       // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
+  //     ],
+  //   },
+  // ] :  [
+  //   {
+  //     key: '1',
+  //     icon: <DashboardOutlined />,
+  //     label: <Link to="/">Dashboard</Link>,
+  //   },
+
+  //   {
+  //     key: 'sub5',
+  //     icon: <UserOutlined />,
+  //     label: 'Users',
+  //     children: [
+  //       { key: '7', label: <Link to="/users">User list</Link> },
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub7',
+  //     icon: <ProductOutlined />,
+  //     label: 'Products',
+  //     children: [
+  //       { key: '10', label: <Link to="/products">Products</Link> },
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub89',
+  //     icon: <OrderedListOutlined />,
+  //     label: 'Orders',
+  //     children: [
+  //       { key: '1028', label: <Link to="/orders">Received Orders</Link> }
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub9',
+  //     icon: <SettingOutlined />,
+  //     label: 'Setting',
+  //     children: [
+  //       { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+  //       // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
+  //     ],
+  //   },
+  //   {
+  //     key: 'sub829',
+  //     icon: <QueryStatsOutlined />,
+  //     label: 'Queries',
+  //     children: [
+  //       { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
+  //     ],
+  //   },
+  // ];
+
+  const commonMenuItems = [
     {
       key: '1',
       icon: <DashboardOutlined />,
       label: <Link to="/">Dashboard</Link>,
     },
     {
+      key: 'sub7',
+      icon: <ProductOutlined />,
+      label: 'Products',
+      children: [
+        { key: '10', label: <Link to="/products">Products</Link> },
+      ],
+    },
+    {
+      key: 'sub89',
+      icon: <OrderedListOutlined />,
+      label: 'Orders',
+      children: [
+        { key: '1028', label: <Link to="/orders">Received Orders</Link> },
+      ],
+    },
+    {
+      key: 'sub9',
+      icon: <SettingOutlined />,
+      label: 'Settings',
+      children: [
+        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
+      ],
+    },
+    {
+      key: 'sub829',
+      icon: <QueryStatsOutlined />,
+      label: 'Queries',
+      children: [
+        { key: '102', label: <Link to="/view-tickets">Received Queries</Link> },
+      ],
+    },
+  ];
+
+  const adminMenuItems = [
+    {
       key: 'sub2',
       icon: <WebAssetOutlined />,
       label: 'Websites',
       children: [
-        { key: '687', label: <Link to="/websites">All Website</Link> }
+        { key: '687', label: <Link to="/websites">All Websites</Link> },
       ],
     },
     {
@@ -119,7 +271,6 @@ function Sidebar() {
         { key: '6', label: <Link to="/categories">All Categories</Link> },
       ],
     },
-
     {
       key: 'sub5',
       icon: <UserOutlined />,
@@ -128,73 +279,13 @@ function Sidebar() {
         { key: '7', label: <Link to="/users">User list</Link> },
       ],
     },
-
-    {
-      key: 'sub7',
-      icon: <ProductOutlined />,
-      label: 'Products',
-      children: [
-        { key: '10', label: <Link to="/products">Products</Link> },
-      ],
-    },
-    {
-      key: 'sub89',
-      icon: <OrderedListOutlined />,
-      label: 'Orders',
-      children: [
-        { key: '1028', label: <Link to="/orders">Received Orders</Link> }
-      ],
-    },
-    {
-      key: 'sub829',
-      icon: <QueryStatsOutlined />,
-      label: 'Queries',
-      children: [
-        { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
-      ],
-    },
-
-    {
-      key: 'sub9',
-      icon: <SettingOutlined />,
-      label: 'Setting',
-      children: [
-        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-        // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
-      ],
-    },
-  ] :  [
-    {
-      key: '1',
-      icon: <DashboardOutlined />,
-      label: <Link to="/">Dashboard</Link>,
-    },
-    {
-      key: 'sub7',
-      icon: <ProductOutlined />,
-      label: 'Products',
-      children: [
-        { key: '10', label: <Link to="/products">Products</Link> },
-      ],
-    },
-    {
-      key: 'sub89',
-      icon: <OrderedListOutlined />,
-      label: 'Orders',
-      children: [
-        { key: '1028', label: <Link to="/orders">Received Orders</Link> }
-      ],
-    },
-    {
-      key: 'sub9',
-      icon: <SettingOutlined />,
-      label: 'Setting',
-      children: [
-        { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-        // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
-      ],
-    },
   ];
+
+  const menuItems =
+    user?.role === 'super-admin'
+      ? [...commonMenuItems, ...adminMenuItems]
+      : commonMenuItems;
+
 
   return (
     <>
@@ -209,7 +300,7 @@ function Sidebar() {
         >
           <div className="fixed-logo" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <img
-              src={logo}
+              src={logoURL}
               alt="logo"
               style={{ width: collapsed ? '60px' : '150px', marginTop: '15%' }}
             />
