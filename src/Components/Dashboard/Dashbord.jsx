@@ -33,18 +33,19 @@ function Dashbord() {
       <div style={{ height: '200px' }} className='topsidebar'>
         <div className='flex' style={{ height: '100%', display: 'flex', justifyContent: 'space-between' }}>
           <h1 className='sidebar-text'>Welcome {user?.firstName} !</h1>
+          {user && user.role === "vendor" && <h1 className='sidebar-text'>Wallet : {user.wallet}</h1>}
           <img style={{ maxHeight: '100%', width: 'unset' }} className='sidebar-image' src={Blog} alt="Blog" />
         </div>
       </div>
-     
-      <div style={{ display: 'flex' ,gap:'10px'}}>
+
+      <div style={{ display: 'flex', gap: '10px' }}>
         <div style={{ width: '50%' }}>
           <ProductOverview products={data?.productStats} />
         </div>
         <div style={{ width: '50%' }}>
           <UserOverview users={data?.userStats} />
         </div>
-      </div> 
+      </div>
       <Payinout orders={data?.orders} />
     </div>
   )

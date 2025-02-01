@@ -4,7 +4,7 @@ import { apiGet } from "../api/apiMethods";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
     const [categories, setCategories] = useState([])
     const [logoURL, setLogoURL] = useState("")
     const token = localStorage.getItem('accessToken')

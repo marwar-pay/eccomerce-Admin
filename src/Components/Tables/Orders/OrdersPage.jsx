@@ -24,6 +24,7 @@ import OrderForm from './OrderForm';
 import OrderDetail from './OrderDetail';
 import { DeleteForeverOutlined } from '@mui/icons-material';
 import DeleteDialog from './../Website/DeleteDialog';
+import { useUser } from '../../../Context/UserContext';
 
 const OrdersPage = () => {
     const [data, setData] = useState([]);
@@ -42,6 +43,8 @@ const OrdersPage = () => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const API_ENDPOINT = `api/order/allorders`;
+
+    const { user } = useUser()
 
     const fetchData = async () => {
         try {
@@ -75,11 +78,12 @@ const OrdersPage = () => {
     };
 
     useEffect(() => {
-        fetchDropdownData();
+        if (user && user.role === 'super-admin') fetchDropdownData();
+        else setfilterWebsite(import.meta.env.VITE_API_REFERENCE_WEBSITE)
     }, []);
 
     useEffect(() => {
-            fetchData();
+        fetchData();
     }, [filterWebsite, currentPage, searchInput, pageSize, sortBy, sortOrder, minPrice, maxPrice]);
 
     const deleteHandler = async (id) => {
@@ -133,7 +137,7 @@ const OrdersPage = () => {
                         }}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                {user && user.role === 'super-admin' && <Grid item xs={3}>
                     <FormControl fullWidth>
                         <InputLabel>Reference Website</InputLabel>
                         <Select
@@ -141,13 +145,13 @@ const OrdersPage = () => {
                             onChange={(e) => setfilterWebsite(e.target.value)}
                             label="Website"
                         >
-                                <MenuItem value=''>All</MenuItem>
+                            <MenuItem value=''>All</MenuItem>
                             {websites && websites.map((item, index) =>
                                 <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
-                </Grid>
+                </Grid>}
                 <Grid item xs={3}>
                     <TextField
                         label="Min Price"

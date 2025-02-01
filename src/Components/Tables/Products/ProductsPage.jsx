@@ -90,18 +90,18 @@ const ProductsPage = () => {
         }
     }, [user])
 
-    useEffect(() => {
-        if (filterWebsite) {
-            const matchedWebsite = websites.find((website) => website._id === filterWebsite);
-            if (matchedWebsite) {
-                setCategories(matchedWebsite.categories || []);
-            } else {
-                setCategories([]);
-            }
-        } else {
-            setCategories([]);
-        }
-    }, [filterWebsite, websites]);
+    // useEffect(() => {
+    //     if (filterWebsite) {
+    //         const matchedWebsite = websites.find((website) => website._id === filterWebsite);
+    //         if (matchedWebsite) {
+    //             setCategories(matchedWebsite.categories || []);
+    //         } else {
+    //             setCategories([]);
+    //         }
+    //     } else {
+    //         setCategories([]);
+    //     }
+    // }, [filterWebsite, websites]);
 
     useEffect(() => {
         if (filterWebsite) {
@@ -217,6 +217,9 @@ const ProductsPage = () => {
                 </Grid>
                 <Grid item xs={3}>
                     <ProductForm categories={categories} websites={websites} dataHandler={fetchData} />
+                </Grid>
+                <Grid item xs={3}>
+                    <ProductForm addCategory={true} categories={categories} websites={websites} dataHandler={fetchData} />
                 </Grid>
             </Grid>
             <TableContainer component={Paper} sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}>

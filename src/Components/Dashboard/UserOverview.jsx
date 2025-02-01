@@ -1,5 +1,6 @@
 import { Box, Grid, Paper, Typography, AppBar, Toolbar } from '@mui/material';
 import CountUp from 'react-countup';
+import { useUser } from '../../Context/UserContext';
 
 const UserOverview = ({ users }) => {
   const cardStyles = {
@@ -13,6 +14,8 @@ const UserOverview = ({ users }) => {
       transition: 'transform 0.2s ease-in-out',
     },
   };
+
+  const { user } = useUser()
 
   const gradientBackgrounds = {
     user: 'linear-gradient(to right, #673ab7, #512da8)',
@@ -43,7 +46,7 @@ const UserOverview = ({ users }) => {
       </AppBar>
 
       {/* Total Users Summary */}
-      <Grid container spacing={3} sx={{ marginBottom: '20px' }}>
+      {user && user.role === "super-admin" && <Grid container spacing={3} sx={{ marginBottom: '20px' }}>
         <Grid item xs={12} md={6}>
           <Paper
             sx={{
@@ -59,7 +62,7 @@ const UserOverview = ({ users }) => {
             </Typography>
           </Paper>
         </Grid>
-      </Grid>
+      </Grid>}
 
       {/* User Summary by Reference Website */}
       <Grid container spacing={3}>
