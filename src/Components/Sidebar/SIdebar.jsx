@@ -252,6 +252,14 @@ function Sidebar() {
         { key: '102', label: <Link to="/view-tickets">Received Queries</Link> },
       ],
     },
+    {
+      key: 'sub6',
+      icon: <UserOutlined />,
+      label: 'Vendor Requests',
+      children: [
+        { key: '8', label: <Link to="/vendors">Vendors list</Link> },
+      ],
+    },
   ];
 
   const adminMenuItems = [

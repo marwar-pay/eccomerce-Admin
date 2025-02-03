@@ -1,0 +1,222 @@
+import {
+    Paper,
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+    Grid,
+    Button,
+    Pagination,
+    IconButton,
+    MenuItem,
+    Select,
+    FormControl,
+    InputLabel
+} from '@mui/material';
+import { useUser } from '../../../Context/UserContext';
+import { useEffect, useState } from 'react';
+import { apiGet, apiPatch } from '../../../api/apiMethods';
+import { DeleteForeverOutlined } from '@mui/icons-material';
+import VendorModal from './VendorModal';
+
+export default function VendorsPage() {
+    const { user } = useUser();
+    const [vendors, setVendors] = useState([])
+    const [searchInput, setSearchInput] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [sortOrder, setSortOrder] = useState('desc');
+    const [pageSize, setPageSize] = useState(10);
+
+    useEffect(() => {
+
+        (async () => {
+            try {
+                if (!localStorage.getItem("accessToken")) return;
+
+                const { data } = await apiGet('/api/incoming-vendor-requests');
+                console.log("data:", data);
+                setVendors(data);
+            } catch (error) {
+                console.log(error);
+            }
+        })()
+    }, [])
+
+    async function updateVendorRequest(userId, accept, commissionRate) {
+        try {
+            await apiPatch(`/api/update-vendor-request/${userId}`, { accept, commissionRate });
+            alert("Vendor request updated successfully");
+        } catch (error) {
+            console.log("updateVendorRequest ~ error:", error);
+        }
+    }
+
+    return (
+        <>
+            <Grid container alignItems="center" sx={{ mb: 2 }}>
+                <Grid item xs>
+                    <Typography variant="h5" gutterBottom>Vendor requests</Typography>
+                </Grid>
+            </Grid>
+            <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
+                <Grid item xs={6} md={3}>
+                    <TextField
+                        label="Search by Name"
+                        variant="outlined"
+                        fullWidth
+                        value={{}}
+                        onChange={(e) => {
+                            // setSearchInput(e.target.value);
+                            // setCurrentPage(1);
+                        }}
+                    />
+                </Grid>
+                {user && user.role === "super-admin" && <Grid item xs={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Reference Website</InputLabel>
+                        <Select
+                            value={{}}
+                            defaultValue=''
+                            // onChange={(e) => setfilterWebsite(e.target.value)}
+                            label="Sort By"
+                        >
+                            {/* {websites && websites.map((item, index) =>
+                                <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
+                            )} */}
+                        </Select>
+                    </FormControl>
+                </Grid>}
+                <Grid item xs={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Category</InputLabel>
+                        <Select
+                            // value={filterCategory}
+                            defaultValue=''
+                            // onChange={(e) => setFilterCategory(e.target.value)}
+                            label="Product Category"
+                        >
+                            <MenuItem value=''>All</MenuItem>
+                            {/* {categories && categories.map((item, index) =>
+                                <MenuItem key={index} value={item._id}>{item.name}</MenuItem>
+                            )} */}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Sort By</InputLabel>
+                        <Select
+                            // value={sortBy}
+                            // onChange={(e) => handleSortChange(e.target.value)}
+                            label="Sort By"
+                        >
+                            <MenuItem value="productName">Name</MenuItem>
+                            <MenuItem value="price">Price</MenuItem>
+                            <MenuItem value="discount">Discount</MenuItem>
+                            <MenuItem value="createdAt">Created</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={2}>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                    // onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                    >
+                        {/* {sortOrder === 'asc' ? 'Ascending' : 'Descending'} */}
+                    </Button>
+                </Grid>
+                <Grid item xs={3}>
+                    {/* <ProductForm categories={categories} websites={websites} dataHandler={fetchData} /> */}
+                </Grid>
+                <Grid item xs={3}>
+                    {/* <ProductForm addCategory={true} categories={categories} websites={websites} dataHandler={fetchData} /> */}
+                </Grid>
+            </Grid>
+            <TableContainer component={Paper} sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}>
+                <Table sx={{ borderCollapse: 'collapse' }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>#</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Name</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Company</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>GSTIn Number</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Mobile</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Action</strong></TableCell>
+                        </TableRow>
+                    </TableHead>
+
+                    <TableBody>
+                        {vendors.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={12} align="center">No data available.</TableCell>
+                            </TableRow>
+                        ) : (
+                            vendors.map((item, index) => (
+                                <TableRow key={item._id}>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        {index + (currentPage - 1) * pageSize + 1}
+                                    </TableCell>
+                                    <TableCell onClick={() => {
+                                        // setSelectedWebsite(item);
+                                        // setDetailOpen(true)
+                                    }
+                                    } sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
+                                        {item.firstName + " " + item.lastName || 'NA'}
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        {item.company || 'NA'}
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        {item.gstInNumber || '0'}
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        {item.mobile}
+                                    </TableCell>
+                                    <TableCell sx={{ display: 'flex', border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        <IconButton >
+                                            <VendorModal updateVendorRequest={updateVendorRequest} userId={item._id} />
+                                        </IconButton>
+                                        <IconButton onClick={() => updateVendorRequest(item._id, false)}>
+                                            <DeleteForeverOutlined />
+                                        </IconButton>
+                                        {/* <ProductForm categories={categories} websites={websites} dataHandler={fetchData} initialData={item} /> */}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer >
+            {/* <ProductDetail
+                open={detailOpen}
+                onClose={() => {
+                    setDetailOpen(false);
+                    setSelectedWebsite(null);
+                }}
+                data={selectedWebsite}
+            /> */}
+            {/* <DeleteDialog
+                deleteHandler={deleteHandler}
+                itemId={selectedItemId}
+                open={dialogOpen}
+                onClose={closeDialog}
+            /> */}
+            <Grid container justifyContent="center">
+                <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    // onChange={handlePageChange}
+                    variant="outlined"
+                    shape="rounded"
+                />
+            </Grid>
+        </>
+    )
+}
