@@ -38,10 +38,10 @@ const Login = () => {
       const { accessToken, refreshToken, userData } = response.data;
       if (userData.role === "admin" || userData.role === 'vendor' || userData.role === 'super-admin') {
         if (accessToken && refreshToken) {
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
+          sessionStorage.setItem("accessToken", accessToken);
+          sessionStorage.setItem("refreshToken", refreshToken);
           const expirationTime = new Date().getTime() + (rememberMe ? 24 : 1) * 60 * 60 * 1000;
-          localStorage.setItem("expirationTime", expirationTime);
+          sessionStorage.setItem("expirationTime", expirationTime);
           setSnackbarMessage("Login successful!");
           setOpenSnackbar(true);
           setTimeout(() => {
@@ -147,7 +147,15 @@ const Login = () => {
                     position: "relative",
                   }}
                 >
-                  <img
+                   <Typography
+                  component="h1"
+                  variant="h4"
+                  gutterBottom
+                  sx={{ fontWeight: 700, marginTop: "0px" }}
+                >
+                  Admin Panel
+                </Typography>
+                  {/* <img
                     src={logo}
                     alt="Logo"
                     style={{
@@ -155,13 +163,13 @@ const Login = () => {
                       bottom: "-1px",
                       height: "90px",
                     }}
-                  />
+                  /> */}
                 </Box>
                 <Typography
                   component="h1"
-                  variant="h4"
+                  variant="h5"
                   gutterBottom
-                  sx={{ fontWeight: 700, marginTop: "20px" }}
+                  sx={{ fontWeight: 700, marginTop: "0px" }}
                 >
                   Log In
                 </Typography>

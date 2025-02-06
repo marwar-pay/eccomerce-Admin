@@ -10,14 +10,14 @@ export const HandleAxiosError = (err) => {
     if (err.response?.status === 401 || err.response?.status === 403) {
       // Remove invalid or expired token
       if (
-        localStorage.getItem("accessToken") !== "undefined" &&
-        localStorage.getItem("accessToken") !== null
+        sessionStorage.getItem("accessToken") !== "undefined" &&
+        sessionStorage.getItem("accessToken") !== null
       ) {
-        localStorage.removeItem("accessToken");
+        sessionStorage.removeItem("accessToken");
       }
   
       // Optionally remove the refreshToken as well, if needed
-      localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("refreshToken");
   
       // Redirect to login page
       window.location.href = "/login";

@@ -34,14 +34,14 @@ function Sidebar() {
   console.log("file: SIdebar.jsx:34 ~ Sidebar ~ logoURL:", logoURL);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
 
 
   const handleLogout = async () => {
     try {
       const response = await apiGet(`api/auth/logOut`);
       if (response.status === 200) {
-        localStorage.removeItem('accessToken');
+        sessionStorage.removeItem('accessToken');
         message.success(response.data.message || "You have been logged out.");
         navigate('/login');
         setUser(null)
@@ -252,14 +252,6 @@ function Sidebar() {
         { key: '102', label: <Link to="/view-tickets">Received Queries</Link> },
       ],
     },
-    {
-      key: 'sub6',
-      icon: <UserOutlined />,
-      label: 'Vendor Requests',
-      children: [
-        { key: '8', label: <Link to="/vendors">Vendors list</Link> },
-      ],
-    },
   ];
 
   const adminMenuItems = [
@@ -292,7 +284,15 @@ function Sidebar() {
   const menuItems =
     user?.role === 'super-admin'
       ? [...commonMenuItems, ...adminMenuItems]
-      : commonMenuItems;
+      : user?.role === "admin" ? [...commonMenuItems,
+      {
+        key: 'sub6',
+        icon: <UserOutlined />,
+        label: 'Vendor Requests',
+        children: [
+          { key: '8', label: <Link to="/vendors">Vendors list</Link> },
+        ],
+      },] : [];
 
 
   return (

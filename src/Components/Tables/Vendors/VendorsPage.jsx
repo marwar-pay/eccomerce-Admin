@@ -37,7 +37,7 @@ export default function VendorsPage() {
 
         (async () => {
             try {
-                if (!localStorage.getItem("accessToken")) return;
+                if (!sessionStorage.getItem("accessToken")) return;
 
                 const { data } = await apiGet('/api/incoming-vendor-requests');
                 console.log("data:", data);
@@ -64,7 +64,7 @@ export default function VendorsPage() {
                     <Typography variant="h5" gutterBottom>Vendor requests</Typography>
                 </Grid>
             </Grid>
-            <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
+            {/* <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
                 <Grid item xs={6} md={3}>
                     <TextField
                         label="Search by Name"
@@ -86,9 +86,6 @@ export default function VendorsPage() {
                             // onChange={(e) => setfilterWebsite(e.target.value)}
                             label="Sort By"
                         >
-                            {/* {websites && websites.map((item, index) =>
-                                <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
-                            )} */}
                         </Select>
                     </FormControl>
                 </Grid>}
@@ -96,15 +93,10 @@ export default function VendorsPage() {
                     <FormControl fullWidth>
                         <InputLabel>Category</InputLabel>
                         <Select
-                            // value={filterCategory}
                             defaultValue=''
-                            // onChange={(e) => setFilterCategory(e.target.value)}
                             label="Product Category"
                         >
                             <MenuItem value=''>All</MenuItem>
-                            {/* {categories && categories.map((item, index) =>
-                                <MenuItem key={index} value={item._id}>{item.name}</MenuItem>
-                            )} */}
                         </Select>
                     </FormControl>
                 </Grid>
@@ -112,8 +104,6 @@ export default function VendorsPage() {
                     <FormControl fullWidth>
                         <InputLabel>Sort By</InputLabel>
                         <Select
-                            // value={sortBy}
-                            // onChange={(e) => handleSortChange(e.target.value)}
                             label="Sort By"
                         >
                             <MenuItem value="productName">Name</MenuItem>
@@ -127,18 +117,14 @@ export default function VendorsPage() {
                     <Button
                         variant="contained"
                         fullWidth
-                    // onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
                     >
-                        {/* {sortOrder === 'asc' ? 'Ascending' : 'Descending'} */}
                     </Button>
                 </Grid>
                 <Grid item xs={3}>
-                    {/* <ProductForm categories={categories} websites={websites} dataHandler={fetchData} /> */}
                 </Grid>
                 <Grid item xs={3}>
-                    {/* <ProductForm addCategory={true} categories={categories} websites={websites} dataHandler={fetchData} /> */}
                 </Grid>
-            </Grid>
+            </Grid> */}
             <TableContainer component={Paper} sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}>
                 <Table sx={{ borderCollapse: 'collapse' }}>
                     <TableHead>

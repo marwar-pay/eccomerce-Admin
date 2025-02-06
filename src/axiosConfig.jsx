@@ -10,7 +10,7 @@ const useAxiosInterceptors = () => {
   
       if (error.response && error.response.status === 401) {
 
-        localStorage.removeItem('access_token');
+        sessionStorage.removeItem('access_token');
         
       
         navigate('/login');

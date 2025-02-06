@@ -48,6 +48,8 @@ const OrdersPage = () => {
 
     const fetchData = async () => {
         try {
+            if (!user) return;
+            if(["admin", "vendor"].includes(user.role) && !filterWebsite) return;
             const response = await apiGet(API_ENDPOINT, {
                 referenceWebsite: filterWebsite,
                 customerName: searchInput,
