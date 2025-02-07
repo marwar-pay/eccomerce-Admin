@@ -46,7 +46,6 @@ const ProductsPage = () => {
     const API_ENDPOINT = `api/product/getproducts`;
 
     const { user, setCategories, categories } = useUser()
-    console.log("file: ProductsPage.jsx:49 ~ ProductsPage ~ user:", user);
 
     const fetchData = async () => {
         try {
@@ -68,7 +67,6 @@ const ProductsPage = () => {
         }
     };
 
-    console.log(data)
 
     const fetchDropdownData = async () => {
         try {
@@ -83,10 +81,10 @@ const ProductsPage = () => {
     };
     useEffect(() => {
         if (!user) return;
-        if (user.role === 'super-admin') {
+        if (user?.role === 'super-admin') {
             fetchDropdownData();
         } else {
-            setfilterWebsite(user.referenceWebsite)
+            setfilterWebsite(user?.referenceWebsite)
         }
     }, [user])
 
@@ -256,8 +254,8 @@ const ProductsPage = () => {
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         <div style={{ display: 'flex', gap: '4px' }}>
-                                            {item.images.map((item) =>
-                                                <img style={{ height: '35px', width: '35px', objectFit: 'cover', boxShadow: "1px 1px 10px", borderRadius: '50%' }} src={item} alt="" />
+                                            {item.images.map((item,index) =>
+                                                <img key={index} style={{ height: '35px', width: '35px', objectFit: 'cover', boxShadow: "1px 1px 10px", borderRadius: '50%' }} src={item} alt="" />
                                             ) || 'NA'}
                                         </div>
 

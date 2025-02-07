@@ -23,6 +23,7 @@ import {
 import { apiGet } from '../../../api/apiMethods';
 import UserDetail from './UserDetail';
 import UserRoleForm from './UserForm';
+import { useUser } from '../../../Context/UserContext';
 
 const UsersPage = () => {
     const [data, setData] = useState([]);
@@ -40,6 +41,8 @@ const UsersPage = () => {
     const [filterWebsite, setfilterWebsite] = useState('');
     const API_ENDPOINT = `api/auth/allusers`;
 
+    const { user } = useUser()
+
     const fetchData = async () => {
         try {
             const response = await apiGet(API_ENDPOINT, {
@@ -48,9 +51,10 @@ const UsersPage = () => {
                 page: currentPage,
                 limit: pageSize,
                 sortBy,
+                role:user.role === "super-admin" ? null : "user",
                 sortOrder
             });
-            const users  = response.data?.data;
+            const users = response.data?.data;
             setData(users || []);
             setTotalPages(response.data?.totalPages || 1);
         } catch (error) {
@@ -71,13 +75,21 @@ const UsersPage = () => {
         }
     };
     useEffect(() => {
-        fetchDropdownData();
-    }, [])
+        if (!user) return;
+        if (user?.role === 'super-admin') {
+            fetchDropdownData();
+        } else {
+            setfilterWebsite(user?.referenceWebsite)
+        }
+    }, [user])
+    // useEffect(() => {
+    //     fetchDropdownData();
+    // }, [])
 
     useEffect(() => {
-        // if (filterWebsite) {
+        if (filterWebsite) {
             fetchData();
-        // }
+        }
     }, [filterWebsite, currentPage, searchInput, sortBy, sortOrder, pageSize]);
 
     const openDialog = (id) => {
@@ -119,22 +131,24 @@ const UsersPage = () => {
                         }}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <FormControl fullWidth>
-                        <InputLabel>Reference Website</InputLabel>
-                        <Select
-                            value={filterWebsite}
-                            defaultValue=''
-                            onChange={(e) => setfilterWebsite(e.target.value)}
-                            label="Sort By"
-                        >
-                            <MenuItem value=''>None</MenuItem>
-                            {websites && websites.map((item, index) =>
-                                <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                </Grid>
+                {user?.role === "super-admin" &&
+                    <Grid item xs={3}>
+                        <FormControl fullWidth>
+                            <InputLabel>Reference Website</InputLabel>
+                            <Select
+                                value={filterWebsite}
+                                defaultValue={user?.referenceWebsite}
+                                onChange={(e) => setfilterWebsite(e.target.value)}
+                                label="Sort By"
+                            >
+                                <MenuItem value=''>None</MenuItem>
+                                {websites && websites.map((item, index) =>
+                                    <MenuItem key={index} value={item._id}>{item.websiteName}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                }
                 <Grid item xs={3}>
                     <FormControl fullWidth>
                         <InputLabel>Sort By</InputLabel>
@@ -180,13 +194,13 @@ const UsersPage = () => {
                             data.map((item, index) => (
                                 <TableRow key={item._id}>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                    {index + (currentPage - 1) * pageSize + 1}
+                                        {index + (currentPage - 1) * pageSize + 1}
                                     </TableCell>
                                     <TableCell onClick={() => {
                                         setSelectedWebsite(item);
                                         setDetailOpen(true)
                                     }
-                                    } sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer'}}>
+                                    } sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
                                         {item.firstName + ' ' + item.lastName || 'NA'}
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
@@ -199,7 +213,7 @@ const UsersPage = () => {
                                         {item.role}
                                     </TableCell>
                                     <TableCell sx={{ display: 'flex', border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                        <UserRoleForm userId={item._id} currentRole={item.role} userDetails={item} onRoleChange={fetchData}/>
+                                        <UserRoleForm userId={item._id} currentRole={item.role} userDetails={item} onRoleChange={fetchData} />
                                     </TableCell>
                                 </TableRow>
                             ))

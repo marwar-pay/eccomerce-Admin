@@ -81,8 +81,10 @@ const OrdersPage = () => {
 
     useEffect(() => {
         if (user && user.role === 'super-admin') fetchDropdownData();
-        else setfilterWebsite(import.meta.env.VITE_API_REFERENCE_WEBSITE)
-    }, []);
+        else {
+            setfilterWebsite(user?.referenceWebsite)
+        }
+    }, [user]);
 
     useEffect(() => {
         fetchData();

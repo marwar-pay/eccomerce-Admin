@@ -9,6 +9,7 @@ import {
   MoonOutlined,
   ProductOutlined,
   OrderedListOutlined,
+  UserAddOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Layout, Menu, Dropdown, message, theme } from 'antd';
 import { useNavigate } from 'react-router';
@@ -252,6 +253,14 @@ function Sidebar() {
         { key: '102', label: <Link to="/view-tickets">Received Queries</Link> },
       ],
     },
+    {
+      key: 'sub5',
+      icon: <UserOutlined />,
+      label: 'Users',
+      children: [
+        { key: '7', label: <Link to="/users">User list</Link> },
+      ],
+    },
   ];
 
   const adminMenuItems = [
@@ -271,14 +280,7 @@ function Sidebar() {
         { key: '6', label: <Link to="/categories">All Categories</Link> },
       ],
     },
-    {
-      key: 'sub5',
-      icon: <UserOutlined />,
-      label: 'Users',
-      children: [
-        { key: '7', label: <Link to="/users">User list</Link> },
-      ],
-    },
+
   ];
 
   const menuItems =
@@ -287,7 +289,7 @@ function Sidebar() {
       : user?.role === "admin" ? [...commonMenuItems,
       {
         key: 'sub6',
-        icon: <UserOutlined />,
+        icon: <UserAddOutlined />,
         label: 'Vendor Requests',
         children: [
           { key: '8', label: <Link to="/vendors">Vendors list</Link> },
