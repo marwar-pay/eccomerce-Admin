@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
                 setCategories(data.website.categories);
                 setLogoURL(data.logoUrl);
             } catch (error) {
-                console.log("file: UserContext.jsx:32 ~ error:", error);
+                console.log(error.message)
             }
         })()
     }, [user])

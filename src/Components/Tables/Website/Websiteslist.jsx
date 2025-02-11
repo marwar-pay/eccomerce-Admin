@@ -19,9 +19,10 @@ import {
 
 import { apiDelete, apiGet } from '../../../api/apiMethods';
 import NewWebsite from './NewWebsite';
-import { DeleteForeverOutlined, EditNoteOutlined } from '@mui/icons-material';
+import { DeleteForeverOutlined, EditAttributesOutlined, EditCalendarOutlined, EditNoteOutlined, PolicyOutlined } from '@mui/icons-material';
 import DeleteDialog from './DeleteDialog';
 import ViewDetail from './ViewDetail';
+import PolicyDialog from './PolicyDialog';
 
 const Websiteslist = () => {
   const [data, setData] = useState([]); // Initialize as an array
@@ -34,6 +35,8 @@ const Websiteslist = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [selectedWebsite, setSelectedWebsite] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [policydialogOpen, setPolicyDialogOpen] = useState(false);
+  const [selectedWeb,setWeb]= useState(null)
 
   const API_ENDPOINT = `api/website`;
 
@@ -62,7 +65,7 @@ const Websiteslist = () => {
   };
 
   useEffect(() => {
-      fetchCategories();
+    fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
@@ -184,6 +187,7 @@ const Websiteslist = () => {
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Description</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Date</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Status</strong></TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Policy</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -215,6 +219,11 @@ const Websiteslist = () => {
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', color: item.activeStatus === 'Success' ? 'green' : 'red' }}>
                     {item.activeStatus ? 'active' : 'deactive'}
                   </TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                    <IconButton onClick={() => {setPolicyDialogOpen(true),setWeb(item._id)}}>
+                      <PolicyOutlined />
+                    </IconButton>
+                  </TableCell>
                   <TableCell sx={{ display: 'flex', border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                     <IconButton onClick={() => openDialog(item._id)}>
                       <DeleteForeverOutlined />
@@ -236,27 +245,13 @@ const Websiteslist = () => {
         }}
         websiteData={selectedWebsite}
       />
-
+      <PolicyDialog selectedWeb={selectedWeb} open={policydialogOpen} onClose={() => setPolicyDialogOpen(false)} />
       <DeleteDialog
-        deleteHandler={deleteHandler} // Pass the delete function
-        itemId={selectedItemId}      // Pass the ID of the item to delete
-        open={dialogOpen}            // Control dialog visibility
+        deleteHandler={deleteHandler}
+        itemId={selectedItemId}
+        open={dialogOpen}
         onClose={closeDialog}
       />
-
-      {
-        !viewAll && (
-          <Grid container justifyContent="center" sx={{ mt: 2 }}>
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-              variant="outlined"
-              shape="rounded"
-            />
-          </Grid>
-        )
-      }
     </>
   );
 };

@@ -22,7 +22,6 @@ const CreateTicket = () => {
     e.preventDefault();
     try {
       const response = await apiPost(API_ENDPOINT, formData);
-      console.log('Ticket created successfully:', response.data);
       setOpenSnackbar(true);
       setTimeout(() => {
         setShowViewTicket(true);

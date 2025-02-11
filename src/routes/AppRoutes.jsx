@@ -14,6 +14,8 @@ import ProductsPage from '../Components/Tables/Products/ProductsPage';
 import UsersPage from '../Components/Tables/Users/UsersPage';
 import OrdersPage from '../Components/Tables/Orders/OrdersPage';
 import VendorsPage from '../Components/Tables/Vendors/VendorsPage';
+import RichtextEditor from '../Components/Editor/RicktextEditor';
+import PolicyPage from '../Components/Tables/Policy/PolicyPage';
 
 const AppRoutes = () => {
   useAxiosInterceptors();
@@ -26,12 +28,14 @@ const AppRoutes = () => {
       <Route path="/users" element={<UsersPage />} />
       <Route path="/orders" element={<OrdersPage />} />
       <Route path="/vendors" element={<VendorsPage />} />
-
+      <Route path="/textEditor" element={<RichtextEditor/>} />
+      <Route path="/policy" element={<PolicyPage/>} />
       <Route path="/view-tickets" element={<ViewTicket />} />
       {/* <Route path="/create-ticket" element={<CreateTicket />} /> */}
       <Route path="/settings/profile" element={<Profile />} />
       <Route path="/settings/changepassword" element={<ChangePassword />} />
       <Route path="/settings/edit" element={<EditProfile />} />
+      
     </Routes>
   );
 };

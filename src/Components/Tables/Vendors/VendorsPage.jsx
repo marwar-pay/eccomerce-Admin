@@ -38,9 +38,7 @@ export default function VendorsPage() {
         (async () => {
             try {
                 if (!sessionStorage.getItem("accessToken")) return;
-
                 const { data } = await apiGet('/api/incoming-vendor-requests');
-                console.log("data:", data);
                 setVendors(data);
             } catch (error) {
                 console.log(error);
@@ -53,7 +51,7 @@ export default function VendorsPage() {
             await apiPatch(`/api/update-vendor-request/${userId}`, { accept, commissionRate });
             alert("Vendor request updated successfully");
         } catch (error) {
-            console.log("updateVendorRequest ~ error:", error);
+            console.log(error.message)
         }
     }
 

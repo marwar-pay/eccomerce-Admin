@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import AppRoutes from '../../routes/AppRoutes';
 import '../style.css'; // Import the CSS file
-import { CategoryOutlined, DashboardOutlined, QueryStatsOutlined, WebAssetOutlined } from '@mui/icons-material';
+import { CategoryOutlined, DashboardOutlined, PrivacyTipOutlined, QueryStatsOutlined, WebAssetOutlined } from '@mui/icons-material';
 import logo from "../.././assets/images/logo.png";
 import { apiGet } from '../../api/apiMethods';
 import { useUser } from '../../Context/UserContext';
@@ -32,7 +32,6 @@ function Sidebar() {
     token: { borderRadiusLG },
   } = theme.useToken();
   const { user, setUser, logoURL } = useUser();
-  console.log("file: SIdebar.jsx:34 ~ Sidebar ~ logoURL:", logoURL);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   const token = sessionStorage.getItem('accessToken');
@@ -260,7 +259,7 @@ function Sidebar() {
       children: [
         { key: '7', label: <Link to="/users">User list</Link> },
       ],
-    },
+    }
   ];
 
   const adminMenuItems = [

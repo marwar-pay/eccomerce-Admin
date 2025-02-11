@@ -95,7 +95,7 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
         setCategories(prevCategories => [...prevCategories, data.category]);
         handleClose();
       } catch (error) {
-        console.log("file: ProductForm.jsx:96 ~ handleSubmit ~ error:", error);
+        console.log(error.message)
       }
       return;
     }
