@@ -282,18 +282,53 @@ function Sidebar() {
 
   ];
 
+  const vendorMenuItems = [
+    {
+      key: 'sub2',
+      icon: <WebAssetOutlined />,
+      label: 'Websites',
+      children: [
+        { key: '687', label: <Link to="/websites">All Websites</Link> },
+      ],
+    },
+    {
+      key: '8',
+      icon: <CategoryOutlined />,
+      label: 'Categories',
+      children: [
+        { key: '6', label: <Link to="/categories">All Categories</Link> },
+      ],
+    },
+
+  ];
+
   const menuItems =
-    user?.role === 'super-admin'
-      ? [...commonMenuItems, ...adminMenuItems]
-      : user?.role === "admin" ? [...commonMenuItems,
-      {
-        key: 'sub6',
-        icon: <UserAddOutlined />,
-        label: 'Vendor Requests',
-        children: [
-          { key: '8', label: <Link to="/vendors">Vendors list</Link> },
-        ],
-      },] : [];
+  user?.role === 'super-admin'
+    ? [...commonMenuItems, ...adminMenuItems,]
+    : user?.role === "admin"
+      ? [
+          ...commonMenuItems,
+          {
+            key: 'sub6',
+            icon: <UserAddOutlined />,
+            label: 'Vendor Requests',
+            children: [
+              { key: '8', label: <Link to="/vendors">Vendors list</Link> },
+            ],
+          },
+        ]
+      : user?.role === 'vendor'
+        ? [ ...commonMenuItems,
+            {
+              key: 'sub6',
+              icon: <UserAddOutlined />,
+              label: 'Wallet',
+              children: [
+                { key: '8', label: <Link to="/wallet">Wallet</Link> },
+              ],
+            },
+          ]
+        : [];
 
 
   return (
@@ -355,11 +390,12 @@ function Sidebar() {
               >
                 {userData?.role}
               </p>
+              
               <Dropdown menu={{ items: menuItems1 }} trigger={['click']}>
                 {userData && userData?.profileImage ? (
                   <img src={userData?.profileImage} alt="Profile" style={{ width: 40, height: 40, borderRadius: '50%' }} />
                 ) : (
-                  <Avatar size="large" style={{ backgroundColor: '#87d068' }}>{userInitial}</Avatar>
+                  <Avatar size="large" style={{ backgroundColor: '#87d068' }}>{userInitial ? userInitial : user?.ownerName || user?.username }</Avatar>
                 )}
               </Dropdown>
               <Button

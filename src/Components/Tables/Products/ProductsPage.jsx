@@ -29,6 +29,7 @@ import { useUser } from '../../../Context/UserContext';
 
 const ProductsPage = () => {
     const [data, setData] = useState([]);
+   
     const [detailOpen, setDetailOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
@@ -43,11 +44,38 @@ const ProductsPage = () => {
     const [filterWebsite, setfilterWebsite] = useState('');
     const [filterCategory, setFilterCategory] = useState('')
     // const [categories, setCategories] = useState([]);
-    const API_ENDPOINT = `api/product/getproducts`;
+    
 
     const { user, setCategories, categories } = useUser()
 
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await apiGet(API_ENDPOINT, {
+    //             referenceWebsite: filterWebsite,
+    //             search: searchInput,
+    //             page: currentPage,
+    //             limit: pageSize,
+    //             category: filterCategory,
+    //             sortBy,
+    //             sortOrder,
+    //             vendorId:"67e7d67965424fb490461fa4"
+    //         });
+    //         const { products, pagination } = response.data;
+    //         setData(products || []);
+    //         setTotalPages(pagination?.totalPages || 1);
+    //     } catch (error) {
+    //         setData([])
+    //         console.error(error.message);
+    //     }
+    // };
+
     const fetchData = async () => {
+        if (!user) return;
+    
+        const API_ENDPOINT = user?.role === "vendor" 
+            ? `http://192.168.1.13:5067/api/product/getproducts` 
+            : `api/product/getproducts`;
+    
         try {
             const response = await apiGet(API_ENDPOINT, {
                 referenceWebsite: filterWebsite,
@@ -56,18 +84,18 @@ const ProductsPage = () => {
                 limit: pageSize,
                 category: filterCategory,
                 sortBy,
-                sortOrder
+                sortOrder,
+                ...(user?.role === "vendor" && { vendorId: user._id }) 
             });
             const { products, pagination } = response.data;
             setData(products || []);
             setTotalPages(pagination?.totalPages || 1);
         } catch (error) {
-            setData([])
+            setData([]);
             console.error(error.message);
         }
     };
-
-
+    
     const fetchDropdownData = async () => {
         try {
             const [websitesResponse] = await Promise.all([

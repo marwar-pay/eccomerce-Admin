@@ -7,7 +7,8 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false); 
   const { user } = useUser();
 
-  const userInitial = user ? user.firstName.charAt(0).toUpperCase() : '';
+  // const userInitial = user ? user.firstName.charAt(0).toUpperCase() : '';
+  const userInitial= user ? user.firstName : user?.ownerName;
 
   if (isEditing) {
     return <EditProfile />; // Render the EditProfile component when editing
@@ -32,7 +33,7 @@ const Profile = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>Full Name</TableCell>
-                  <TableCell>{user.firstName+' '+ user.lastName}</TableCell>
+                  <TableCell>{user.firstName ? user.firstName :  user?.ownerName +' '+ user.lastName}</TableCell>
                 </TableRow>
               
                 <TableRow>
@@ -43,6 +44,24 @@ const Profile = () => {
                   <TableCell>Mobile Number</TableCell>
                   <TableCell>{user.mobile}</TableCell>
                 </TableRow>
+                {user.role === "vendor" && (
+  <>
+    <TableRow>
+      <TableCell>Business Category</TableCell>
+      <TableCell>{user.businessCategory}</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Description</TableCell>
+      <TableCell>{user.description}</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Current Balance</TableCell>
+      <TableCell>{user.currentBalance}</TableCell>
+    </TableRow>
+  </>
+)}
+
+                
                 <TableRow>
                   <TableCell>Member Type</TableCell>
                   <TableCell>{user.role}</TableCell>

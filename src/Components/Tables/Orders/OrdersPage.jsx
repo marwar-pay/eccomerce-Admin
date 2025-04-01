@@ -46,28 +46,56 @@ const OrdersPage = () => {
 
     const { user } = useUser()
 
-    const fetchData = async () => {
-        try {
-            if (!user) return;
-            if(["admin", "vendor"].includes(user.role) && !filterWebsite) return;
-            const response = await apiGet(API_ENDPOINT, {
-                referenceWebsite: filterWebsite,
-                customerName: searchInput,
-                page: currentPage,
-                limit: pageSize,
-                sortBy,
-                sortOrder,
-                minPrice,
-                maxPrice,
-            });
-            const orders = response.data?.orders;
-            setData(orders || []);
-            setTotalPages(response.data?.totalPages || 1);
-        } catch (error) {
-            console.error(error.message);
-            setData([]);
-        }
-    };
+    // const fetchData = async () => {
+    //     try {
+    //         if (!user) return;
+    //         if(["admin", "vendor"].includes(user.role) && !filterWebsite) return;
+    //         const response = await apiGet(API_ENDPOINT, {
+    //             referenceWebsite: filterWebsite,
+    //             customerName: searchInput,
+    //             page: currentPage,
+    //             limit: pageSize,
+    //             sortBy,
+    //             sortOrder,
+    //             minPrice,
+    //             maxPrice,
+    //         });
+    //         const orders = response.data?.orders;
+    //         setData(orders || []);
+    //         setTotalPages(response.data?.totalPages || 1);
+    //     } catch (error) {
+    //         console.error(error.message);
+    //         setData([]);
+    //     }
+    // };
+
+   const fetchData = async () => {
+    try {
+        if (!user) return;
+        if (["admin", "vendor"].includes(user.role) && !filterWebsite) return;
+
+        // Set API endpoint dynamically
+        const API_ENDPOINT = user?.role === "vendor" ? "http://192.168.1.13:5067/api/vendor-orders" : "api/order/allorders";
+
+        const response = await apiGet(API_ENDPOINT, {
+            referenceWebsite: filterWebsite,
+            customerName: searchInput,
+            page: currentPage,
+            limit: pageSize,
+            sortBy,
+            sortOrder,
+            minPrice,
+            maxPrice,
+        });
+
+        const orders = response.data?.orders;
+        setData(orders || []);
+        setTotalPages(response.data?.totalPages || 1);
+    } catch (error) {
+        console.error(error.message);
+        setData([]);
+    }
+};
 
     const fetchDropdownData = async () => {
         try {
