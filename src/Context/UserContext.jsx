@@ -83,7 +83,8 @@ const initializeUser = async () => {
             setUser(response.data.user);
         } else {
             // If first API fails, try fetching vendor data
-            const response = await apiGet("api/vendor-info");
+            // const response = await apiGet("api/vendor-info");
+            const response = await apiGet("http://192.168.1.13:5067/api/vendor-info");
             if (response.status === 200 && response.data?.vendor && response.data.stats) {
                 setUser(response.data.vendor);
                 setStats(response.data.stats );

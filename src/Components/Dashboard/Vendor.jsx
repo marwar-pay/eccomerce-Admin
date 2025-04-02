@@ -422,8 +422,9 @@ const Vendor = () => {
                 opacity: 0
             }}>
                 <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#2c3e50', marginBottom: '20px' }}>Categories</h2>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                    {categories.map((category, index) => (
+                {/* <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    {categories.map((category, count,index) => (
+                       
                         <span 
                             key={category.id} 
                             style={{
@@ -458,10 +459,54 @@ const Vendor = () => {
                             }}
                         >
                             {category.name}
+                            <p>{count}</p>
                             </div>
                         </span>
                     ))}
-                </div>
+                </div> */}
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+    {Object.entries(stats.categories).map(([category, count], index) => (
+        <span 
+        key={category} 
+        style={{
+            background: '#e0f7fa',
+            color: '#00838f',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            fontSize: '14px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+            cursor: 'default',
+            transition: 'all 0.2s ease',
+            animation: 'fadeIn 0.5s forwards',
+            animationDelay: `${1.6 + (index * 0.1)}s`,
+            opacity: 0
+        }}
+    >
+         <div 
+                            
+                            style={{ 
+                                background: '#fff',
+                                padding: '20px 25px',
+                                borderRadius: '12px',
+                                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)',
+                                textAlign: 'center',
+                                transition: 'all 0.3s ease',
+                                position: 'relative',
+                                overflow: 'hidden',
+                     
+                                animation: `slideInUp 0.5s forwards`,
+                                animationDelay: `${index * 0.1}s`,
+                                opacity: 0
+                            }}
+                        >
+            {category}
+            <p>{count}</p>
+            </div>
+        </span>
+    ))}
+</div>
+
             </div>
         </div>
     );

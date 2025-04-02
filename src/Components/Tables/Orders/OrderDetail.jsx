@@ -14,7 +14,7 @@ const OrderDetail = ({ open, onClose, data }) => {
                                 Customer Name :
                             </Typography>
                             <Typography variant="body1" sx={{ marginTop: 0.5 }}>
-                                {data.customer?.firstName} {data.customer?.lastName}
+                                {data.customer?.firstName} {data.customer?.lastName} 
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

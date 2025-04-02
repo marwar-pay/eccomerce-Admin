@@ -48,27 +48,6 @@ const ProductsPage = () => {
 
     const { user, setCategories, categories } = useUser()
 
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await apiGet(API_ENDPOINT, {
-    //             referenceWebsite: filterWebsite,
-    //             search: searchInput,
-    //             page: currentPage,
-    //             limit: pageSize,
-    //             category: filterCategory,
-    //             sortBy,
-    //             sortOrder,
-    //             vendorId:"67e7d67965424fb490461fa4"
-    //         });
-    //         const { products, pagination } = response.data;
-    //         setData(products || []);
-    //         setTotalPages(pagination?.totalPages || 1);
-    //     } catch (error) {
-    //         setData([])
-    //         console.error(error.message);
-    //     }
-    // };
-
     const fetchData = async () => {
         if (!user) return;
     
@@ -257,6 +236,8 @@ const ProductsPage = () => {
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Images</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Amount</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Discount</strong></TableCell>
+                            <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Actual Amount</strong></TableCell>
+                           
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Category</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Actions</strong></TableCell>
                         </TableRow>
@@ -293,6 +274,9 @@ const ProductsPage = () => {
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {item.discount || '0'} %
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        {item.actualPrice || 'NA'} &#8377;
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {item.category?.name}
