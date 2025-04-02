@@ -73,7 +73,7 @@ const ProductsPage = () => {
         if (!user) return;
     
         const API_ENDPOINT = user?.role === "vendor" 
-            ? `http://192.168.1.13:5067/api/product/getproducts` 
+            ? `api/product/getproducts` 
             : `api/product/getproducts`;
     
         try {

@@ -75,7 +75,7 @@ const OrdersPage = () => {
         if (["admin", "vendor"].includes(user.role) && !filterWebsite) return;
 
         // Set API endpoint dynamically
-        const API_ENDPOINT = user?.role === "vendor" ? "http://192.168.1.13:5067/api/vendor-orders" : "api/order/allorders";
+        const API_ENDPOINT = user?.role === "vendor" ? "api/vendor-orders" : "api/order/allorders";
 
         const response = await apiGet(API_ENDPOINT, {
             referenceWebsite: filterWebsite,
