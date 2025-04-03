@@ -46,15 +46,28 @@ function Sidebar() {
   const navigate = useNavigate();
   const token = sessionStorage.getItem('accessToken');
 
-
+ 
+  
   const handleLogout = async () => {
     try {
       const response = await apiGet(`api/auth/logOut`);
+      
       if (response.status === 200) {
-        sessionStorage.removeItem('accessToken');
+        const storedSource = sessionStorage.getItem("loginSource"); // Get stored source website
+       // Get user from context
+  
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("loginSource");
+  
         message.success(response.data.message || "You have been logged out.");
-        navigate('/login');
-        setUser(null)
+        setUser(null);
+      
+        // Redirect logic based on user role
+        if (user?.role === "vendor" && storedSource) {
+          window.location.href = storedSource; // Redirect vendors to the stored website
+        } else {
+          navigate('/login'); // Redirect non-vendor users to login page
+        }
       } else {
         message.error("Logout failed. Please try again.");
       }
@@ -63,7 +76,11 @@ function Sidebar() {
       message.error("An error occurred while logging out. Please try again.");
     }
   };
+  
+  
 
+
+  
   const getUserInitials = (name) => {
     return name ? name.charAt(0).toUpperCase() : '';
   };
