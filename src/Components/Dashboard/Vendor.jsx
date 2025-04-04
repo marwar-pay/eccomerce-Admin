@@ -1,166 +1,3 @@
-
-// import { useEffect, useState } from 'react';
-// import { useUser } from '../../Context/UserContext';
-
-// const Vendor = () => {
-//     const { user, stats, categories, logoURL } = useUser();
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         if (user && stats) {
-//             setLoading(false);
-//         }
-//     }, [user, stats]);
-
-//     if (loading) {
-//         return <div className="loading">Loading...</div>;
-//     }
-
-//     return (
-//         <div className="dashboard">
-//             <div className="dashboard-header">
-//                 <img src={logoURL} alt="Website Logo" className="logo" />
-//                 <h1>Welcome, {user?.ownerName}</h1>
-//             </div>
-
-//             <div className="dashboard-stats">
-//                 <div className="stat-cards">
-//                     {[
-//                         { title: 'Total Orders', value: stats?.totalOrders },
-//                         { title: 'Completed Orders', value: stats?.completedOrders },
-//                         { title: 'Total Pending Amount', value: stats?.totalPendingAmount },
-//                         { title: 'Total Completed Amount', value: stats?.totalCompletedAmount },
-//                         { title: 'Weekly Total', value: stats?.weeklyTotal },
-//                         { title: 'Current Month Total', value: stats?.currentMonthTotal },
-//                         { title: 'Current Year Total', value: stats?.currentYearTotal },
-//                         { title: 'Total Products', value: stats?.totalProducts },
-//                     ].map((stat, index) => (
-//                         <div key={index} className="stat-card">
-//                             <h3>{stat.title}</h3>
-//                             <p>{stat.value}</p>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-
-//             <div className="dashboard-categories">
-//                 <h2>Categories</h2>
-//                 <ul>
-//                     {categories.map((category) => (
-//                         <li key={category.id}>{category.name}</li>
-//                     ))}
-//                 </ul>
-//             </div>
-
-//             <style jsx>{`
-//                 /* Dashboard Styles */
-//                 .dashboard {
-//                     font-family: 'Arial', sans-serif;
-//                     color: #333;
-//                     padding: 20px;
-//                 }
-
-//                 .dashboard-header {
-//                     display: flex;
-//                     align-items: center;
-//                     justify-content: space-between;
-//                     margin-bottom: 20px;
-//                 }
-
-//                 .logo {
-//                     height: 50px;
-//                 }
-
-//                 h1 {
-//                     font-size: 24px;
-//                     font-weight: 600;
-//                     color: #333;
-//                 }
-
-//                 .dashboard-stats {
-//                     display: grid;
-//                     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-//                     gap: 20px;
-//                     margin-bottom: 20px;
-//                 }
-
-//                 .stat-cards {
-//                     display: grid;
-//                     grid-template-columns: repeat(2, 1fr);
-//                     gap: 20px;
-//                 }
-
-//                 .stat-card {
-//                     background: #fff;
-//                     padding: 20px;
-//                     border-radius: 10px;
-//                     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-//                     text-align: center;
-//                 }
-
-//                 .stat-card h3 {
-//                     font-size: 18px;
-//                     color: #555;
-//                 }
-
-//                 .stat-card p {
-//                     font-size: 24px;
-//                     font-weight: bold;
-//                     color: #000;
-//                 }
-
-//                 .dashboard-categories {
-//                     margin-top: 40px;
-//                 }
-
-//                 .dashboard-categories h2 {
-//                     font-size: 20px;
-//                     font-weight: 600;
-//                     color: #333;
-//                     margin-bottom: 15px;
-//                 }
-
-//                 .dashboard-categories ul {
-//                     list-style: none;
-//                     padding: 0;
-//                 }
-
-//                 .dashboard-categories ul li {
-//                     font-size: 16px;
-//                     color: #555;
-//                     padding: 8px 0;
-//                     border-bottom: 1px solid #ddd;
-//                 }
-
-//                 .dashboard-categories ul li:last-child {
-//                     border-bottom: none;
-//                 }
-
-//                 /* Loading state */
-//                 .loading {
-//                     text-align: center;
-//                     font-size: 20px;
-//                     color: #007BFF;
-//                 }
-
-//                 /* Responsive Design */
-//                 @media (max-width: 768px) {
-//                     .dashboard-stats {
-//                         grid-template-columns: 1fr;
-//                     }
-
-//                     .stat-cards {
-//                         grid-template-columns: 1fr;
-//                     }
-//                 }
-//             `}</style>
-//         </div>
-//     );
-// };
-
-// export default Vendor;
-
-
 import { useEffect, useState } from 'react';
 import { useUser } from '../../Context/UserContext';
 import { Bar, Pie, Line } from 'react-chartjs-2';
@@ -263,15 +100,16 @@ const Vendor = () => {
     };
 
     const statCards = [
-        { title: 'Total Orders', value: stats?.totalOrders, icon: '📦', color: '#FF6384' },
-        { title: 'Completed Orders', value: stats?.completedOrders, icon: '✅', color: '#36A2EB' },
-        { title: 'Pending Amount', value: `₹${stats?.totalPendingAmount}`, icon: '⏳', color: '#FF9F40' },
-        { title: 'Completed Amount', value: `₹${stats?.totalCompletedAmount}`, icon: '💰', color: '#4BC0C0' },
-        { title: 'Weekly Total', value: `₹${stats?.weeklyTotal}`, icon: '📅', color: '#9966FF' },
-        { title: 'Monthly Total', value: `₹${stats?.currentMonthTotal}`, icon: '🗓️', color: '#FFCD56' },
-        { title: 'Yearly Total', value: `₹${stats?.currentYearTotal}`, icon: '📊', color: '#C9CBCF' },
-        { title: 'Total Products', value: stats?.totalProducts, icon: '🛍️', color: '#8AC249' },
+        { title: 'Total Orders', value: stats?.totalOrders ?? "N/A", icon: '📦', color: '#FF6384' },
+        { title: 'Completed Orders', value: stats?.completedOrders ?? "N/A", icon: '✅', color: '#36A2EB' },
+        { title: 'Pending Amount', value: `₹${stats?.totalPendingAmount ?? "N/A"}`, icon: '⏳', color: '#FF9F40' },
+        { title: 'Completed Amount', value: `₹${stats?.totalCompletedAmount ?? "N/A"}`, icon: '💰', color: '#4BC0C0' },
+        { title: 'Weekly Total', value: `₹${stats?.weeklyTotal ?? "N/A"}`, icon: '📅', color: '#9966FF' },
+        { title: 'Monthly Total', value: `₹${stats?.currentMonthTotal ?? "N/A"}`, icon: '🗓️', color: '#FFCD56' },
+        { title: 'Yearly Total', value: `₹${stats?.currentYearTotal ?? "N/A"}`, icon: '📊', color: '#C9CBCF' },
+        { title: 'Total Products', value: stats?.totalProducts ?? "N/A", icon: '🛍️', color: '#8AC249' },
     ];
+    
 
     return (
         <div  className= "container" style={{
@@ -501,7 +339,7 @@ const Vendor = () => {
                             }}
                         >
             {category}
-            <p>{count}</p>
+            <p>{count ?? "N/A"}</p>
             </div>
         </span>
     ))}
