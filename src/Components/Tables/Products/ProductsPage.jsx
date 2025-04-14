@@ -44,6 +44,9 @@ const ProductsPage = () => {
     const [filterWebsite, setfilterWebsite] = useState('');
     const [filterCategory, setFilterCategory] = useState('')
     // const [categories, setCategories] = useState([]);
+    const [minPrice, setMinPrice] = useState('');
+const [maxPrice, setMaxPrice] = useState('');
+
     
 
     const { user, setCategories, categories } = useUser()
@@ -64,6 +67,8 @@ const ProductsPage = () => {
                 category: filterCategory,
                 sortBy,
                 sortOrder,
+                ...(minPrice && { minPrice }),
+    ...(maxPrice && { maxPrice }),
                 ...(user?.role === "vendor" && { vendorId: user._id }) 
             });
             const { products, pagination } = response.data;
@@ -112,7 +117,7 @@ const ProductsPage = () => {
         if (filterWebsite) {
             fetchData();
         }
-    }, [filterWebsite, currentPage, searchInput, sortBy, sortOrder, pageSize, filterCategory]);
+    }, [filterWebsite, currentPage, searchInput, sortBy, sortOrder, pageSize, filterCategory,maxPrice,minPrice]);
 
     const deleteHandler = async (id) => {
         let API_URL = `api/product/delete/${id}`;
@@ -211,6 +216,33 @@ const ProductsPage = () => {
                         </Select>
                     </FormControl>
                 </Grid>
+                <Grid item xs={3}>
+    <TextField
+        label="Min Price"
+        type="number"
+        variant="outlined"
+        fullWidth
+        value={minPrice}
+        onChange={(e) => {
+            setMinPrice(e.target.value);
+            setCurrentPage(1);
+        }}
+    />
+</Grid>
+<Grid item xs={3}>
+    <TextField
+        label="Max Price"
+        type="number"
+        variant="outlined"
+        fullWidth
+        value={maxPrice}
+        onChange={(e) => {
+            setMaxPrice(e.target.value);
+            setCurrentPage(1);
+        }}
+    />
+</Grid>
+
                 <Grid item xs={2}>
                     <Button
                         variant="contained"
