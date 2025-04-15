@@ -308,7 +308,7 @@ const [maxPrice, setMaxPrice] = useState('');
                                         {item.discount || '0'} %
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
-                                        {item.actualPrice || 'NA'} &#8377;
+                                        {Math.round(item.actualPrice) || 'NA'} &#8377;
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {item.category?.name}
