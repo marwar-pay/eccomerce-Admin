@@ -125,121 +125,6 @@ function Sidebar() {
 
 
 
-  // const menuItems = user?.role === 'super-admin' ? [
-  //   {
-  //     key: '1',
-  //     icon: <DashboardOutlined />,
-  //     label: <Link to="/">Dashboard</Link>,
-  //   },
-  //   {
-  //     key: 'sub2',
-  //     icon: <WebAssetOutlined />,
-  //     label: 'Websites',
-  //     children: [
-  //       { key: '687', label: <Link to="/websites">All Website</Link> }
-  //     ],
-  //   },
-  //   {
-  //     key: '8',
-  //     icon: <CategoryOutlined />,
-  //     label: 'Categories',
-  //     children: [
-  //       { key: '6', label: <Link to="/categories">All Categories</Link> },
-  //     ],
-  //   },
-
-  //   {
-  //     key: 'sub5',
-  //     icon: <UserOutlined />,
-  //     label: 'Users',
-  //     children: [
-  //       { key: '7', label: <Link to="/users">User list</Link> },
-  //     ],
-  //   },
-
-  //   {
-  //     key: 'sub7',
-  //     icon: <ProductOutlined />,
-  //     label: 'Products',
-  //     children: [
-  //       { key: '10', label: <Link to="/products">Products</Link> },
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub89',
-  //     icon: <OrderedListOutlined />,
-  //     label: 'Orders',
-  //     children: [
-  //       { key: '1028', label: <Link to="/orders">Received Orders</Link> }
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub829',
-  //     icon: <QueryStatsOutlined />,
-  //     label: 'Queries',
-  //     children: [
-  //       { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
-  //     ],
-  //   },
-
-  //   {
-  //     key: 'sub9',
-  //     icon: <SettingOutlined />,
-  //     label: 'Setting',
-  //     children: [
-  //       { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-  //       // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
-  //     ],
-  //   },
-  // ] :  [
-  //   {
-  //     key: '1',
-  //     icon: <DashboardOutlined />,
-  //     label: <Link to="/">Dashboard</Link>,
-  //   },
-
-  //   {
-  //     key: 'sub5',
-  //     icon: <UserOutlined />,
-  //     label: 'Users',
-  //     children: [
-  //       { key: '7', label: <Link to="/users">User list</Link> },
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub7',
-  //     icon: <ProductOutlined />,
-  //     label: 'Products',
-  //     children: [
-  //       { key: '10', label: <Link to="/products">Products</Link> },
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub89',
-  //     icon: <OrderedListOutlined />,
-  //     label: 'Orders',
-  //     children: [
-  //       { key: '1028', label: <Link to="/orders">Received Orders</Link> }
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub9',
-  //     icon: <SettingOutlined />,
-  //     label: 'Setting',
-  //     children: [
-  //       { key: '15', label: <Link to="/settings/profile">My Profile</Link> },
-  //       // { key: '16', label: <Link to="/settings/changepassword">Change Password</Link> },
-  //     ],
-  //   },
-  //   {
-  //     key: 'sub829',
-  //     icon: <QueryStatsOutlined />,
-  //     label: 'Queries',
-  //     children: [
-  //       { key: '102', label: <Link to="/view-tickets">Received Queries</Link> }
-  //     ],
-  //   },
-  // ];
 
   const commonMenuItems = [
     {
@@ -370,11 +255,26 @@ function Sidebar() {
           className="sider"
         >
           <div className="fixed-logo" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img
+            {/* <img
               src={logoURL}
               alt="logo"
               style={{ width: collapsed ? '60px' : '150px', marginTop: '15%' }}
-            />
+            /> */}
+             {
+    logoURL ? (
+      <img
+        src={logoURL}
+        alt="logo"
+        style={{ width: collapsed ? '60px' : '150px', marginTop: '15%' }}
+      />
+    ) : (
+      <img
+        src={logo}
+        alt="default logo"
+        style={{ width: collapsed ? '60px' : '150px', marginTop: '15%' }}
+      />
+    )
+  }
           </div>
 
           <div className="menu-container" style={{ height: '75vh', overflowY: 'auto', background: 'var(--sidebar-bg)' }}>
