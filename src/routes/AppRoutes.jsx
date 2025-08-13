@@ -3,7 +3,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from '../Components/Dashboard/Dashbord';
 import ViewTicket from '../Components/Tables/Support/Viewticket';
-import CreateTicket from '../Components/Pages/Support/Createsupportticket';
 import ChangePassword from '../Components/Pages/Setting/Changepass';
 import Profile from '../Components/Pages/Setting/Profile';
 import EditProfile from '../Components/Pages/Setting/EditProfile';
@@ -17,6 +16,9 @@ import VendorsPage from '../Components/Tables/Vendors/VendorsPage';
 import RichtextEditor from '../Components/Editor/RicktextEditor';
 import PolicyPage from '../Components/Tables/Policy/PolicyPage';
 import WalletPage from '../Components/Tables/Wallet/Walletpage';
+import BannerManager from '../Components/Tables/Banner/BannerForm';
+import BannerPage from '../Components/Tables/Banner/BannerPage';
+import BannerForm from '../Components/Tables/Banner/BannerForm';
 
 const AppRoutes = () => {
   useAxiosInterceptors();
@@ -37,6 +39,8 @@ const AppRoutes = () => {
       <Route path="/settings/profile" element={<Profile />} />
       <Route path="/settings/changepassword" element={<ChangePassword />} />
       <Route path="/settings/edit" element={<EditProfile />} />
+      <Route path="/banner" element={<BannerPage />} />
+      <Route path="/create_banner" element={<BannerForm />} />
       
     </Routes>
   );

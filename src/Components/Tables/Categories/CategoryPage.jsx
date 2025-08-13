@@ -8,17 +8,16 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField,
+   
     Grid,
-    Button,
-    Pagination,
+
     useMediaQuery,
     IconButton,
-    Snackbar
+  
 } from '@mui/material';
 
 import { apiDelete, apiGet } from '../../../api/apiMethods';
-import { DeleteForeverOutlined, EditNoteOutlined } from '@mui/icons-material';
+import { DeleteForeverOutlined} from '@mui/icons-material';
 import DeleteDialog from '../Website/DeleteDialog';
 import CategoryForm from './CategoryForm';
 
@@ -71,7 +70,7 @@ const CategoryPage = () => {
 
     return (
         <>
-            <Grid sx={{ mb: 3, paddingTop: '20px', position: isSmallScreen ? 'relative' : 'sticky', top: isSmallScreen ? 'auto' : 0, zIndex: 1000, backgroundColor: 'white' }} className='setdesigntofix'>
+            <Grid sx={{ mb: 3, paddingTop: '20px', position: isSmallScreen ? 'relative' : 'sticky', top: isSmallScreen ? 'auto' : -15, zIndex: 1000, backgroundColor: 'white' }} className='setdesigntofix'>
                 <Grid container alignItems="center" sx={{ mb: 2 }}>
                     <Grid item xs>
                         <Typography variant="h5" gutterBottom>Product Categories</Typography>
@@ -86,6 +85,7 @@ const CategoryPage = () => {
                         <TableRow>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>#</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Name</strong></TableCell>
+                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Images</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Description</strong></TableCell>
                             <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Actions</strong></TableCell>
                         </TableRow>
@@ -104,6 +104,13 @@ const CategoryPage = () => {
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', cursor: 'pointer' }}>
                                         {item.name || 'NA'}
+                                    </TableCell>
+                                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
+                                              <img key={index} style={{ height: '35px', width: '35px', objectFit: 'cover', boxShadow: "1px 1px 10px", borderRadius: '50%' }} src={item.image} alt="" />
+                                            
+                                        </div>
+
                                     </TableCell>
                                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>
                                         {item.description || 'NA'}

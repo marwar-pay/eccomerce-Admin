@@ -191,8 +191,7 @@ function Sidebar() {
         { key: '6', label: <Link to="/categories">All Categories</Link> },
       ],
     },
-
-  ];
+    ];
 
   const vendorMenuItems = [
     {
@@ -226,6 +225,14 @@ function Sidebar() {
             label: 'Vendor Requests',
             children: [
               { key: '8', label: <Link to="/vendors">Vendors list</Link> },
+            ],
+          },
+          {
+            key: 'banner',
+            icon: <CategoryOutlined />,
+            label: 'Banner',
+            children: [
+              { key: 'banner', label: <Link to="/banner">Banner</Link> },
             ],
           },
         ]
