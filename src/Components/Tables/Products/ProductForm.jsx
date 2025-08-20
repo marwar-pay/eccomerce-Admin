@@ -12,6 +12,8 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
   const [price, setPrice] = useState(0);
   const [size, setSize] = useState('M');
   const [discount, setDiscount] = useState(0);
+  const [metaTag, setMetaTag] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
   const [referenceWebsite, setReferenceWebsite] = useState('');
   const [category, setCategory] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -30,6 +32,9 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
       setDiscount(initialData?.discount || 0);
       setReferenceWebsite(initialData?.referenceWebsite || '');
       setCategory(initialData?.category?._id || '');
+      setMetaTag(initialData?.metaTag?.join(', ') || '');
+      setMetaDescription(initialData?.metaDescription || '');
+
     } else {
       resetForm();
     }
@@ -50,6 +55,9 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
     setDiscount(0);
     setReferenceWebsite('');
     setCategory('');
+    setMetaTag('');
+    setMetaDescription('');
+
   };
 
   useEffect(() => {
@@ -66,24 +74,28 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
   }, [referenceWebsite, websites]);
 
   const handleSubmit = async () => {
-    if ((!addCategory && (!productName || !description || !images || !price || !referenceWebsite || !category)) || addCategory && !productName) {
-      setSnackbarMessage('Please fill all required fields');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
-      return;
-    }
 
-    const newProduct = {
-      productName,
-      description,
-      images: images.split(',').map((img) => img.trim()),
-      price,
-      actualPrice: (price * (100 - discount) / 100).toFixed(2),
-      size,
-      discount,
-      referenceWebsite,
-      category,
-    };
+
+    if ((!addCategory && (!productName || !description || !images || !price || !referenceWebsite || !category || !metaDescription)) || (addCategory && !productName)) {
+  setSnackbarMessage('Please fill all required fields');
+  setSnackbarSeverity('error');
+  setSnackbarOpen(true);
+  return;
+}
+
+  const newProduct = {
+  productName,
+  description,
+  images: images.split(',').map((img) => img.trim()),
+  price,
+  actualPrice: (price * (100 - discount) / 100).toFixed(2),
+  size,
+  discount,
+  referenceWebsite,
+  category,
+  metaTag: metaTag.split(',').map(tag => tag.trim()),
+  metaDescription,
+};
 
     const newCategory = {
       name: productName,
@@ -205,6 +217,25 @@ const ProductForm = ({ dataHandler, initialData, websites, addCategory }) => {
                   </Select>
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+  <TextField
+    fullWidth
+    label="Meta Tags (comma-separated)"
+    variant="outlined"
+    value={metaTag}
+    onChange={(e) => setMetaTag(e.target.value)}
+  />
+</Grid>
+<Grid item xs={12}>
+  <TextField
+    fullWidth
+    label="Meta Description"
+    variant="outlined"
+    value={metaDescription}
+    onChange={(e) => setMetaDescription(e.target.value)}
+  />
+</Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
